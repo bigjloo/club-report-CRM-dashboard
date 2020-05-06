@@ -1,0 +1,23 @@
+{% extends "users/base.html" %} {% block title %} Registration page {%endblock%}
+{% block body %} {% if message %} {{ message }} {% endif %}
+<div>
+  <h3>Register</h3>
+  <form action="{% url 'register' %}" method="POST">
+    {% csrf_token %}
+    <input
+      type="text"
+      name="username"
+      placeholder="Choose a username"
+      autocomplete="None"
+    />
+    <input type="email" name="email" placeholder="Email" />
+    <input type="password" name="password" placeholder="Password" />
+    <input
+      type="password"
+      name="password_confirmation"
+      placeholder="Repeat Password"
+    />
+    <input type="submit" value="Register" />
+  </form>
+</div>
+{% endblock %}
