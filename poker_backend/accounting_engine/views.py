@@ -1,36 +1,39 @@
 from django.shortcuts import render
-from .models import Report
+from .models import AccountReport, AgentReport, Account, Agent
+from django.contrib.auth.models import User
 from decimal import Decimal
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
+from django.urls import reverse
 # Create your views here.
-
-parsed_data = [
-    {
-        "nickname": "Bangalilove",
-        "player_id": "53015",
-        "agent_id": "43333",
-        "total_winnings": "-52.56",
-        "fee": "1175.35",
-        "insurance": "0",
-        "jackpot": "0",
-        "hands": "127"
-    },
-    {
-        "nickname": "Sammyfarhana",
-        "player_id": "57410",
-        "agent_id": "43333",
-        "total_winnings": "315.39",
-        "fee": "1175.35",
-        "insurance": "0",
-        "jackpot": "0",
-        "hands": "893"
-    }
-]
-agent_id = 43333
-user = User.objects.get(pk=2)
 
 
 def create_report(request):
+    # sample data
+    parsed_data = [
+        {
+            "nickname": "Bangalilove",
+            "player_id": "53015",
+            "agent_id": "43333",
+            "total_winnings": "-52.56",
+            "fee": "1175.35",
+            "insurance": "0",
+            "jackpot": "0",
+            "hands": "127"
+        },
+        {
+            "nickname": "Sammyfarhana",
+            "player_id": "57410",
+            "agent_id": "43333",
+            "total_winnings": "315.39",
+            "fee": "1175.35",
+            "insurance": "0",
+            "jackpot": "0",
+            "hands": "893"
+        }
+    ]
+
+    agent_id = 43333
+    user = User.objects.get(pk=2)
     # AgentReport counter
     agent_gross_winloss = 0
     agent_total_rake = 0
@@ -40,7 +43,10 @@ def create_report(request):
     agent_insurance = 0
     agent_hands = 0
 
-    # create account report
+  # agent = request.data.agent_id
+    agent = Agent.objects.get(club_agent_id=agent_id)
+
+   # create account report
     for row in parsed_data:
         account_id = row["player_id"]
         # check if account exist in database
@@ -56,12 +62,14 @@ def create_report(request):
         total_rake = Decimal(row["fee"])
         # calculate engine
         gross_winloss = total_winnings
-        rakeback_earnings = account.rakeback * total_rake
-        net_winloss = gross_winloss + rakeback_earnings + insurance + jackpot
+        rakeback_earnings = round((account.rakeback * total_rake), 2)
+        net_winloss = round(
+            (gross_winloss + rakeback_earnings + insurance + jackpot), 2)
+        print(f"{gross_winloss} | {total_rake} | {rakeback_earnings} | {net_winloss} | {insurance} | {jackpot} | {hands} | {account}")
         # create AccountReport
         try:
             account_report = AccountReport(gross_winloss=gross_winloss, total_rake=total_rake, rakeback_earnings=rakeback_earnings,
-                                           net_winloss=net_winloss, insurance=insurance, jackport=jackpot, hands=hands, account=account)
+                                           net_winloss=net_winloss, insurance=insurance, jackpot=jackpot, hands=hands, account=account)
         except:
             raise Http404("error creating account report")
         account_report.save()
@@ -76,10 +84,9 @@ def create_report(request):
         agent_insurance += insurance
         agent_hands += hands
 
-    #user = request.user
-    user = user
-    #agent = request.data.agent_id
-    agent = Agent.objects.get(club_agent_id=agent_id)
+    # user = request.user
+    #user = user
+
     # create AgentReport
     try:
         agent_report = AgentReport(gross_winloss=agent_gross_winloss,
@@ -87,4 +94,5 @@ def create_report(request):
     except:
         raise Http404("error creating agent report")
     agent_report.save()
-    # some validation for accounting
+    # todo some validation for accounting
+    return HttpResponseRedirect(reverse('index'))
