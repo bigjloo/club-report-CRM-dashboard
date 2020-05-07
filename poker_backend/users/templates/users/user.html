@@ -23,15 +23,24 @@
   <h3>Agents</h3>
   <ul>
     {% for agent in agents %}
-    <li>{{ agent }}</li>
+    <li>
+      {{ agent }}
+      <ul>
+        {% for account in agent.accounts.all %}
+        <li>{{ account }}</li>
+        {% endfor %}
+      </ul>
+    </li>
     {% endfor %}
   </ul>
 </div>
 <div>
-  <button>Add account</button>
+  <button>Add Account</button>
+  <button>Add Agent</button>
 </div>
 <div>
   <a href="{% url 'create_report' %}">test create record</a>
 </div>
+
 <a href="{% url 'logout' %}">logout</a>
 {% endblock %}

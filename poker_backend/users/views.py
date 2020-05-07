@@ -16,10 +16,12 @@ def index(request):
     agents = user.agents.all()
     # except Agent.DoesNotExist:
     #    raise Http404("User has no agents")
+
     context = {
         "user": request.user,
         "clubs": clubs,
         "agents": agents
+
     }
     return render(request, "users/user.html", context)
 

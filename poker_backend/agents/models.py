@@ -30,7 +30,7 @@ class Agent(models.Model):
         User, on_delete=models.CASCADE, related_name="agents")
 
     def __str__(self):
-        return f"{self.nickname} - {self.club} - {self.rakeback}"
+        return f"{self.nickname} - {self.club} - {round((self.rakeback * 100), 1)}%"
 
 
 class Account(models.Model):
@@ -41,7 +41,7 @@ class Account(models.Model):
     agent = models.ManyToManyField(Agent, related_name="accounts")
 
     def __str__(self):
-        return f"{self.club_account_id} - {self.nickname}"
+        return f"{self.club_account_id} - {self.nickname} - {round((self.rakeback * 100), 1)}%"
 
 
 # class AgentForm(ModelForm):
