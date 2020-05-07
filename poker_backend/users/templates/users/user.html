@@ -1,11 +1,46 @@
 {% extends "users/base.html" %} {% block title %} {{ user }} {% endblock %}
-{%block body%}
+{%block script%}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelector("#add-agent-button").onclick = () => {
+      alert("button clicked");
+    };
+  });
+</script>
+{%endblock%} {%block body%}
 <div>
   <h3>Welcome {{ user.username}}</h3>
 </div>
 <div>
-  <a>Add Agent</a>
-  <a>Add account</a>
+  <h3>Clubs</h3>
+  <ul>
+    {% for club in clubs %}
+    <li>{{ club }}</li>
+    {% endfor %}
+  </ul>
 </div>
+<div>
+  <h3>Agents</h3>
+  <ul>
+    {% for agent in agents %}
+    <li>
+      {{ agent }}
+      <ul>
+        {% for account in agent.accounts.all %}
+        <li>{{ account }}</li>
+        {% endfor %}
+      </ul>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+<div>
+  <button>Add Account</button>
+  <button>Add Agent</button>
+</div>
+<div>
+  <a href="{% url 'create_report' %}">test create record</a>
+</div>
+
 <a href="{% url 'logout' %}">logout</a>
 {% endblock %}
