@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.forms import ModelForm
 
 # Create your models here.
 
@@ -35,8 +36,15 @@ class Agent(models.Model):
 class Account(models.Model):
     nickname = models.CharField(max_length=64)
     club_account_id = models.IntegerField()
+    rakeback = models.DecimalField(max_digits=3, decimal_places=3)
     club = models.ManyToManyField(Club, blank=True, related_name="accounts")
     agent = models.ManyToManyField(Agent, related_name="accounts")
 
     def __str__(self):
         return f"{self.club_account_id} - {self.nickname}"
+
+
+# class AgentForm(ModelForm):
+#    class Meta:
+#        model = Agent
+#        exclude = ['user']

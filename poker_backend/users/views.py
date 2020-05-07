@@ -1,16 +1,26 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth.models import User
 from django.urls import reverse
+from agents.models import Club, Agent
+
 # Create your views here.
 
 
 def index(request):
     if not request.user.is_authenticated:
         return render(request, 'users/login.html')
+    user = request.user
+    clubs = Club.objects.all()
+    try:
+        agents = Agent.objects.get(user=user)
+    except Agent.DoesNotExist:
+        raise Http404("Agent does not exist")
     context = {
-        "user": request.user
+        "user": request.user,
+        "clubs": clubs,
+        "agents": agents
     }
     return render(request, "users/user.html", context)
 
