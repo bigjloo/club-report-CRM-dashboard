@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     # 'player.apps.PlayerConfig',
     'agents.apps.AgentsConfig',
     'accounting_engine.apps.AccountingEngineConfig',
+    'reader.apps.ReaderConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
