@@ -5,7 +5,7 @@ from django.http import Http404
 """
 sample agent data:
 data = {
-    "nickname": "Brodash",
+    "nickname": "BROBRO",
     "club_agent_id": "898989",
     "club_id": "1",
     "rakeback" = "0.55", 
@@ -18,7 +18,7 @@ def createAgent(data, user_id):
 
     nickname = data["nickname"]
     club_agent_id = int(data["club_agent_id"])
-    club_id = int(data["club_id"])
+    club_id = int(data["club"])
     rakeback = Decimal(data["rakeback"])
     # user= request.user
     user = User.objects.get(pk=user_id)
@@ -33,9 +33,9 @@ def createAgent(data, user_id):
         raise Http404("KeyError")
 
 
-def createAccount(data):
+# def createAccount(data):
     # TODO here
 
 
-def createPlayer(data):
-    # TODO here
+# def createPlayer(data):
+#    # TODO here
