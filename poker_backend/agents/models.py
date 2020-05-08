@@ -23,8 +23,8 @@ class Club(models.Model):
 class Agent(models.Model):
     nickname = models.CharField(max_length=64)
     club_agent_id = models.IntegerField()
-    club = models.ManyToManyField(
-        Club, related_name="agents")
+    club = models.ForeignKey(
+        Club,  on_delete=models.CASCADE, related_name="agents")
     rakeback = models.DecimalField(max_digits=3, decimal_places=3)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="agents")
