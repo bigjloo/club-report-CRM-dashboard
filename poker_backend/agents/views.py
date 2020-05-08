@@ -1,29 +1,46 @@
 from django.shortcuts import render
 from .create import createAgent
 #from rest_framework import viewsets, permissions
-from .serializers import PlayerSerializer, AgentSerializer
-from django.http import JsonResponse
-from rest_framework.parsers import JSONParser
+from .serializers import PlayerSerializer, AgentSerializer, AccountSerializer
+from django.http import JsonResponse, HttpResponseRedirect
+from rest_framework.parsers import FormParser
+
 #
-from django.contrib.auth.models import User
-from django.views.decorators.csrf import csrf_exempt
+#from django.contrib.auth.models import User
+#from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
 
 def createAgent(request):
     user = request.user
-    club = Club.objects.get(pk=1)
-    data = {
-        "nickname": "brobro",
-        "club_agent_id": "898989",
-        "club": "1",
-        "rakeback": "0.55",
-    }
+    data = FormParser().parse(request)
     serializer = AgentSerializer(data=data)
     if serializer.is_valid():
         serializer.save(user=user)
-        return JsonResponse(serializer.data, status=201)
+        next = request.POST.get('next', '/')
+        return HttpResponseRedirect(next, status=201)
+    return JsonResponse(serializer.errors, status=400)
+
+
+def createPlayer(request):
+    user = request.user
+    data = FormParser().parse(request)
+    serializer = PlayerSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save(user=user)
+        next = request.POST.get('next', '/')
+        return HttpResponseRedirect(next, status=201)
+    return JsonResponse(serializer.errors, status=400)
+
+
+def createAccount(request):
+    data = FormParser().parse(request)
+    serializer = AccountSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        next = request.POST.get('next', '/')
+        return HttpResponseRedirect(next, status=201)
     return JsonResponse(serializer.errors, status=400)
 
 

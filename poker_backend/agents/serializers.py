@@ -8,12 +8,16 @@ class AgentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Agent
         exclude = ["user"]
-        
-    def create(self, validated_data):
-        return Agent.objects.create(**validated_data)
 
 
 class PlayerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Player
         fields = ["name"]
+
+
+class AccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = ['nickname', 'club_account_id',
+                  'rakeback', 'club', 'agent', 'player']

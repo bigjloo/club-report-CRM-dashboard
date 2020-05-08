@@ -1,13 +1,5 @@
 {% extends "users/base.html" %} {% block title %} {{ user }} {% endblock %}
-{%block script%}
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    document.querySelector("#add-agent-button").onclick = () => {
-      alert("button clicked");
-    };
-  });
-</script>
-{%endblock%} {%block body%}
+{%block script%} {%endblock%} {%block body%}
 <div>
   <h3>Welcome {{ user.username}}</h3>
 </div>
@@ -22,7 +14,7 @@
 <div>
   <h3>Agents</h3>
   <ul>
-    {% for agent in agents %}
+    {% for agent in user.agents.all %}
     <li>
       {{ agent }}
       <ul>
@@ -35,8 +27,46 @@
   </ul>
 </div>
 <div>
+  <h3>Players</h3>
+  <ul>
+    {% for player in user.players.all %}
+    <li>
+      {{ player }}
+      <ul>
+        {% for account in player.accounts.all %}
+        <li>{{ account }}</li>
+        {% endfor %}
+      </ul>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+
+<div>
+  <form action="{% url 'create_agent' %}" method="POST">
+    {% csrf_token %} {{ agentForm }}
+    <input type="hidden" name="next" value="{{ request.path }}" />
+    <input type="submit" class="btn btn-primary" value="Add Agent" />
+  </form>
+</div>
+
+<div>
+  <form action="{% url 'create_player' %}" method="POST">
+    {% csrf_token %} {{ playerForm }}
+    <input type="hidden" name="next" value="{{ request.path }}" />
+    <input type="submit" class="btn btn-primary" value="Add Player" />
+  </form>
+</div>
+
+<div>
+  <form action="{% url 'create_account' %}" method="POST">
+    {% csrf_token %} {{ accountForm }}
+    <input type="hidden" name="next" value="{{ request.path }}" />
+    <input type="submit" class="btn btn-primary" value="Add Account" />
+  </form>
+</div>
+<div>
   <button>Add Account</button>
-  <button><a href="{% url 'create_agent' %}">Add Agent</a></button>
   <button>Add Player</button>
 </div>
 <div>
