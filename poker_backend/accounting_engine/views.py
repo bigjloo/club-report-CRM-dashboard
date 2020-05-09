@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from decimal import Decimal
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
-from .engine import createReport
+from .engine import generate_report
 # Create your views here.
 
 
@@ -32,14 +32,13 @@ def create_report(request):
             "hands": "893"
         }
     ]
+    """ sample agent ID """
     agent_id = 43333
 
-    #user = User.objects.get(pk=2)
-    # agent = request.data.agent_id
     try:
         agent = Agent.objects.get(club_agent_id=agent_id)
     except Agent.DoesNotExist:
         raise Http404("Agent does not exist")
-    createReport(parsed_data, agent_id=agent_id)
+    generate_report(parsed_data, agent_id=agent_id)
     # todo some validation for accounting
     return HttpResponseRedirect(reverse('index'))

@@ -19,5 +19,11 @@ class PlayerSerializer(serializers.ModelSerializer):
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = ['nickname', 'club_account_id',
-                  'rakeback', 'club', 'agent', 'player']
+        fields = [
+            'nickname',
+            'club_account_id',
+            'rakeback',
+            'club',
+            'agent',
+            'player',
+        ]

@@ -2,6 +2,7 @@
 {% block body %} {% if message %} {{ message }} {% endif %}
 <div>
   <h3>Register</h3>
+  {% if message %} {{ message }}{% endif %}
   <form action="{% url 'register' %}" method="POST">
     {% csrf_token %}
     <input

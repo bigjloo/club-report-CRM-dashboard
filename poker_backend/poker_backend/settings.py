@@ -121,10 +121,8 @@ BOOTSTRAP4 = {
 
 INSTALLED_APPS = [
     'bootstrap4',
-    'crispy_forms',
     'rest_framework',
     'users.apps.UsersConfig',
-    # 'player.apps.PlayerConfig',
     'agents.apps.AgentsConfig',
     'accounting_engine.apps.AccountingEngineConfig',
     'reader.apps.ReaderConfig',
@@ -148,7 +146,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'poker_backend.urls'
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 
 TEMPLATES = [
     {

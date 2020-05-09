@@ -61,21 +61,3 @@ class PlayerViewSet(viewsets.ModelViewSet):
     serializer_class = PlayerSerializer
     permission_classes = [permissions.IsAuthenticated]
 """
-
-
-# @csrf_exempt
-# def agent(request):
-#    #user = request.user
-#    user = User.objects.get(pk=2)
-#    if request.method == "GET":
-#        agents = user.agents.all()
-#        serializer = AgentSerializer(agents, many=True)
-#        return JsonResponse(serializer.data, safe=False)
-
-#    elif request.method == "POST":
-#        data = JSONParser().parse(request)
-#        serializer = AgentSerializer(data=data)
-#        if serializer.is_valid():
-#            serializer.save()
-#            return JsonResponse(serializer.data, status=201)
-#        return JsonResponse(serializer.errors, status=400)

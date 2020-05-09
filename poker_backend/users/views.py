@@ -14,21 +14,15 @@ def index(request):
         return render(request, 'users/login.html')
     user = request.user
     clubs = Club.objects.all()
-    #agents = user.agents.all()
-    # except Agent.DoesNotExist:
-    #    raise Http404("User has no agents")
-    #players = user.players.all()
-    agentForm = AgentForm()
-    playerForm = PlayerForm()
-    accountForm = AccountForm(user)
+    agent_form = AgentForm()
+    player_form = PlayerForm()
+    account_form = AccountForm(user)
     context = {
         "user": request.user,
         "clubs": clubs,
-        # "players": players,
-        # "agents": agents,
-        "agentForm": agentForm,
-        "playerForm": playerForm,
-        "accountForm": accountForm,
+        "agentForm": agent_form,
+        "playerForm": player_form,
+        "accountForm": account_form,
     }
     return render(request, "users/user.html", context)
 
@@ -59,9 +53,12 @@ def register(request):
                             password=password, email=email)
         if user is not None:
             new_user = User.objects.create_user(
-                username=username, password=password, email=email)
+                username=username,
+                password=password,
+                email=email
+            )
             new_user.save()
             return render(request, 'users/login.html')
         else:
-            return HttpResponseRedirect(reverse('register', {"message": "Registration Failed"}))
+            return HttpResponseRedirect(reverse('register'), {"message": "Registration Failed"})
     return render(request, 'users/register.html')

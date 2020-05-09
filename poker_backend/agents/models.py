@@ -1,20 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.forms import ModelForm
 
 # Create your models here.
 
 
 class Club(models.Model):
-    name = models.CharField(max_length=64)
-    code = models.CharField(max_length=3)
     platforms = (
         ('UP', 'Upoker'),
         ('PB', 'PokerBros'),
         ('PPP', 'PPPoker'),
     )
+    name = models.CharField(max_length=64)
+    code = models.CharField(max_length=3)
     chip_value = models.DecimalField(max_digits=3, decimal_places=2)
-    #
     platform = models.CharField(max_length=3, choices=platforms, default='PB')
 
     def __str__(self):
@@ -54,9 +52,3 @@ class Account(models.Model):
 
     def __str__(self):
         return f"{self.club_account_id} - {self.nickname} - {round((self.rakeback * 100), 1)}%"
-
-
-# class AgentForm(ModelForm):
-#    class Meta:
-#        model = Agent
-#        exclude = ['user']
