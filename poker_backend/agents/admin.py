@@ -1,5 +1,5 @@
 from django.contrib import admin
-from agents.models import Club, Agent, Account, Player
+from agents.models import Club, AgentPlayer, Account, Deal, AccountClub
 # Register your models here.
 
 """
@@ -17,6 +17,7 @@ class AccountAdmin(admin.ModelAdmin):
 """
 
 admin.site.register(Club)
-admin.site.register(Agent)
 admin.site.register(Account)
-admin.site.register(Player)
+admin.site.register(Deal)
+admin.site.register(AccountClub)
+admin.site.register(AgentPlayer)

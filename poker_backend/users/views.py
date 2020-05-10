@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth.models import User
 from django.urls import reverse
-from agents.models import Club, Agent
+from agents.models import Club, AgentPlayer
 from .forms import AgentForm, PlayerForm, AccountForm
 
 # Create your views here.

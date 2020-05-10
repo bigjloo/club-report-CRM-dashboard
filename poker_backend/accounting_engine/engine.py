@@ -1,7 +1,7 @@
-from agents.models import Account, Agent
+from agents.models import Account, AgentPlayer
 from decimal import Decimal
 from django.http import Http404
-from accounting_engine.models import AccountReport, AgentReport
+from accounting_engine.models import AccountReport
 
 
 def calculate_account_rakeback(rakeback_percent, rake):
