@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .create import createAgent
 #from rest_framework import viewsets, permissions
-from .serializers import PlayerSerializer, AgentSerializer, AccountSerializer
+from .serializers import AgentPlayerSerializer, AccountSerializer
 from django.http import JsonResponse, HttpResponseRedirect
 from rest_framework.parsers import FormParser
 
@@ -12,10 +12,10 @@ from rest_framework.parsers import FormParser
 # Create your views here.
 
 
-def createAgent(request):
+def create_agent_player(request):
     user = request.user
     data = FormParser().parse(request)
-    serializer = AgentSerializer(data=data)
+    serializer = AgentPlayerSerializer(data=data)
     if serializer.is_valid():
         serializer.save(user=user)
         next = request.POST.get('next', '/')
@@ -34,7 +34,7 @@ def createPlayer(request):
     return JsonResponse(serializer.errors, status=400)
 
 
-def createAccount(request):
+def create_account(request):
     data = FormParser().parse(request)
     serializer = AccountSerializer(data=data)
     if serializer.is_valid():

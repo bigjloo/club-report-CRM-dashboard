@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth.models import User
 from django.urls import reverse
 from agents.models import Club, AgentPlayer
-from .forms import AgentForm, PlayerForm, AccountForm
+from .forms import AgentPlayerForm, AccountForm, AccountClubForm
 
 # Create your views here.
 
@@ -14,15 +14,15 @@ def index(request):
         return render(request, 'users/login.html')
     user = request.user
     clubs = Club.objects.all()
-    agent_form = AgentForm()
-    player_form = PlayerForm()
+    agent_player_form = AgentPlayerForm()
     account_form = AccountForm(user)
+    account_club_form = AccountClubForm()
     context = {
         "user": request.user,
         "clubs": clubs,
-        "agentForm": agent_form,
-        "playerForm": player_form,
-        "accountForm": account_form,
+        "agent_form": agent_player_form,
+        "account_form": account_form,
+        'account_club_form': account_club_form
     }
     return render(request, "users/user.html", context)
 

@@ -12,28 +12,14 @@
   </ul>
 </div>
 <div>
-  <h3>Agents</h3>
+  <h3>Agent Players</h3>
   <ul>
-    {% for agent in user.agents.all %}
+    {% for agent in user.agent_players.all %}
     <li>
       {{ agent }}
+      <p>Accounts</p>
       <ul>
         {% for account in agent.accounts.all %}
-        <li>{{ account }}</li>
-        {% endfor %}
-      </ul>
-    </li>
-    {% endfor %}
-  </ul>
-</div>
-<div>
-  <h3>Players</h3>
-  <ul>
-    {% for player in user.players.all %}
-    <li>
-      {{ player }}
-      <ul>
-        {% for account in player.accounts.all %}
         <li>{{ account }}</li>
         {% endfor %}
       </ul>
@@ -44,23 +30,15 @@
 
 <div>
   <form action="{% url 'create_agent' %}" method="POST">
-    {% csrf_token %} {{ agentForm }}
+    {% csrf_token %} {{ agent_form }}
     <input type="hidden" name="next" value="{{ request.path }}" />
     <input type="submit" class="btn btn-primary" value="Add Agent" />
   </form>
 </div>
 
 <div>
-  <form action="{% url 'create_player' %}" method="POST">
-    {% csrf_token %} {{ playerForm }}
-    <input type="hidden" name="next" value="{{ request.path }}" />
-    <input type="submit" class="btn btn-primary" value="Add Player" />
-  </form>
-</div>
-
-<div>
   <form action="{% url 'create_account' %}" method="POST">
-    {% csrf_token %} {{ accountForm }}
+    {% csrf_token %} {{ account_form }} {{account_club_form}}
     <input type="hidden" name="next" value="{{ request.path }}" />
     <input type="submit" class="btn btn-primary" value="Add Account" />
   </form>
