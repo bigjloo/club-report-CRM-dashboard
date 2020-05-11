@@ -1,4 +1,4 @@
-from agents.models import Account, Agent, Player
+from agents.models import Account, AgentPlayer
 from decimal import Decimal
 from django.http import Http404
 

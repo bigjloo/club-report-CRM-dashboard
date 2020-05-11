@@ -1,10 +1,11 @@
 from django.shortcuts import render
-from .models import AccountReport, AgentReport, Account, Agent
+from .models import AccountReport
 from django.contrib.auth.models import User
 from decimal import Decimal
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
 from .engine import generate_report
+from agents.models import Account, AgentPlayer
 # Create your views here.
 
 

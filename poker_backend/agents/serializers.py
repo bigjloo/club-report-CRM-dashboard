@@ -1,18 +1,18 @@
 from rest_framework import serializers
-from .models import Agent, Account, Player
+from agents.models import AgentPlayer, Account
 
 # this serializer inherits from Agent class
 
 
 class AgentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Agent
+        model = AgentPlayer
         exclude = ["user"]
 
 
 class PlayerSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Player
+        model = AgentPlayer
         fields = ["name"]
 
 
