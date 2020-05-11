@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 # djanga rest framework package
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -120,6 +122,7 @@ BOOTSTRAP4 = {
 # Application definition
 
 INSTALLED_APPS = [
+    'crispy_forms',
     'bootstrap4',
     'rest_framework',
     'users.apps.UsersConfig',

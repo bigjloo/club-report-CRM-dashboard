@@ -1,5 +1,5 @@
 {% extends "users/base.html" %} {% block title %} {{ user }} {% endblock %}
-{%block script%} {%endblock%} {%block body%}
+{%block script%} {%endblock%} {% load crispy_forms_tags %} {%block body%}
 <div>
   <h3>Welcome {{ user.username}}</h3>
 </div>
@@ -30,7 +30,7 @@
 
 <div>
   <form action="{% url 'create_agent' %}" method="POST">
-    {% csrf_token %} {{ agent_form }}
+    {% csrf_token %} {{ agent_form|crispy }}
     <input type="hidden" name="next" value="{{ request.path }}" />
     <input type="submit" class="btn btn-primary" value="Add Agent" />
   </form>
@@ -38,7 +38,7 @@
 
 <div>
   <form action="{% url 'create_account' %}" method="POST">
-    {% csrf_token %} {{ account_form }} {{account_club_form}}
+    {% csrf_token %} {{ account_form|crispy }} {{account_club_form|crispy}}
     <input type="hidden" name="next" value="{{ request.path }}" />
     <input type="submit" class="btn btn-primary" value="Add Account" />
   </form>
