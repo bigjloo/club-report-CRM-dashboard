@@ -14,11 +14,17 @@ class AgentPlayerSerializer(serializers.ModelSerializer):
 
 
 class AccountSerializer(serializers.ModelSerializer):
+
+    """
+    agent_players = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=AgentPlayer.objects.all())
+    """
+
     class Meta:
         model = Account
         fields = [
             'nickname',
             'club_account_id',
             'agent_player',
-            'club',
+            'clubs',
         ]
