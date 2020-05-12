@@ -10,4 +10,12 @@ urlpatterns = [
     path('create_agent', include('agents.urls')),
     #path('create_player', include('agents.urls')),
     path('create_account', include('agents.urls')),
+
+
 ]
+"""  
+    rest framework tutorial
+    """
+#path('user/', views.UserList.as_view()),
+#path('user/<int:pk>/', views.UserDetail.as_view()),
+#path('api-auth/', include('rest_framework.urls')),

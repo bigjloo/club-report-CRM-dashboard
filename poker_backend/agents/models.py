@@ -23,7 +23,7 @@ class AgentPlayer(models.Model):
 
 
 class Club(models.Model):
-    platforms = (
+    PLATFORMS = (
         ('UP', 'Upoker'),
         ('PB', 'PokerBros'),
         ('PPP', 'PPPoker'),
@@ -35,7 +35,7 @@ class Club(models.Model):
     club_id = models.IntegerField()
     chip_value = models.DecimalField(max_digits=3, decimal_places=2, validators=[
                                      MinValueValidator(Decimal('0.01'))])
-    platform = models.CharField(max_length=3, choices=platforms, default='PB')
+    platform = models.CharField(max_length=3, choices=PLATFORMS, default='PB')
     agent_players = models.ManyToManyField(
         AgentPlayer, through='Deal', related_name='clubs')
 

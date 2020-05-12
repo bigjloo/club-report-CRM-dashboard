@@ -5,9 +5,12 @@ from agents.models import AgentPlayer, Account
 
 
 class AgentPlayerSerializer(serializers.ModelSerializer):
+    #user = serializers.ReadOnlyField(source='user.username')
+
     class Meta:
         model = AgentPlayer
-        exclude = ["user"]
+        #fields = "__all__"
+        exclude = ['user']
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -16,8 +19,6 @@ class AccountSerializer(serializers.ModelSerializer):
         fields = [
             'nickname',
             'club_account_id',
-            'rakeback',
+            'agent_player',
             'club',
-            'agent',
-            'player',
         ]

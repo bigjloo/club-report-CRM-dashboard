@@ -7,12 +7,26 @@ from django import forms
 
 
 class AgentPlayerForm(ModelForm):
+
     class Meta:
         model = AgentPlayer
         fields = ['nickname', 'code', 'agent']
 
+    def __init__(self, *args, **kwargs):
+        super(AgentPlayerForm, self).__init__(*args, **kwargs)
+        CHOICES = [(1, 'Agent'), (0, 'Player')]
+        self.fields['code'].help_text = 'Use Agent ID for agents'
+        #self.fields['agent'].choices = CHOICES
+        #self.fields['agent'].widget = forms.CheckboxInput
+
 
 class AccountForm(ModelForm):
+    rakeback_percentage = forms.DecimalField(
+        min_value=0, decimal_places=3, help_text='Should not be higher than your own')
+
+    chip_value = forms.DecimalField(
+        min_value=0.1, decimal_places=2)
+
     class Meta:
         model = Account
         fields = '__all__'
@@ -26,6 +40,7 @@ class AccountForm(ModelForm):
 
 
 class AccountClubForm(ModelForm):
+
     class Meta:
         model = AccountClub
         fields = [

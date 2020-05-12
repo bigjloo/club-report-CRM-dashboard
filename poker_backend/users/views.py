@@ -5,8 +5,20 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from agents.models import Club, AgentPlayer
 from .forms import AgentPlayerForm, AccountForm, AccountClubForm
+from rest_framework import generics
+from .serializers import UserSerializer
 
 # Create your views here.
+
+
+class UserList(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class UserDetail(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 
 def index(request):
@@ -16,13 +28,13 @@ def index(request):
     clubs = Club.objects.all()
     agent_player_form = AgentPlayerForm()
     account_form = AccountForm(user)
-    account_club_form = AccountClubForm()
+    #account_club_form = AccountClubForm()
     context = {
         "user": request.user,
         "clubs": clubs,
         "agent_form": agent_player_form,
         "account_form": account_form,
-        'account_club_form': account_club_form
+        # 'account_club_form': account_club_form,
     }
     return render(request, "users/user.html", context)
 

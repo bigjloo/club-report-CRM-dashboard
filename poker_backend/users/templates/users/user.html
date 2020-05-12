@@ -38,14 +38,10 @@
 
 <div>
   <form action="{% url 'create_account' %}" method="POST">
-    {% csrf_token %} {{ account_form|crispy }} {{account_club_form|crispy}}
+    {% csrf_token %} {{ account_form|crispy }}
     <input type="hidden" name="next" value="{{ request.path }}" />
     <input type="submit" class="btn btn-primary" value="Add Account" />
   </form>
-</div>
-<div>
-  <button>Add Account</button>
-  <button>Add Player</button>
 </div>
 <div>
   <a href="{% url 'create_report' %}">test create record</a>
