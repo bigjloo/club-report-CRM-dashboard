@@ -4,13 +4,13 @@ from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth.models import User
 from django.urls import reverse
 from agents.models import Club, AgentPlayer
-from .forms import AgentPlayerForm, AccountForm, AccountClubForm
+from .forms import AgentPlayerForm, AccountForm, AccountClubForm, UserForm, UploadFileForm
 from rest_framework import generics
-from .serializers import UserSerializer
+#from .serializers import UserSerializer
 
 # Create your views here.
 
-
+"""
 class UserList(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -19,6 +19,7 @@ class UserList(generics.ListAPIView):
 class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+"""
 
 
 def index(request):
@@ -28,12 +29,14 @@ def index(request):
     clubs = Club.objects.all()
     agent_player_form = AgentPlayerForm()
     account_form = AccountForm(user)
+    upload_form = UploadFileForm()
     #account_club_form = AccountClubForm()
     context = {
-        "user": request.user,
+        "user": user,
         "clubs": clubs,
         "agent_form": agent_player_form,
         "account_form": account_form,
+        'upload_form': upload_form,
         # 'account_club_form': account_club_form,
     }
     return render(request, "users/user.html", context)
@@ -73,4 +76,8 @@ def register(request):
             return render(request, 'users/login.html')
         else:
             return HttpResponseRedirect(reverse('register'), {"message": "Registration Failed"})
-    return render(request, 'users/register.html')
+    context = {
+        'form': UserForm()
+    }
+
+    return render(request, 'users/register.html', context)

@@ -33,7 +33,7 @@ class AccountForm(ModelForm):
 
     def __init__(self, user, *args, **kwargs):
         super(AccountForm, self).__init__(*args, **kwargs)
-        self.fields['agent_player'].queryset = AgentPlayer.objects.filter(
+        self.fields['agent_players'].queryset = AgentPlayer.objects.filter(
             user=user)
         #self.fields['player'].queryset = Player.objects.filter(user=user)
         #self.fields['agent'].widgets = ChoiceField()
@@ -46,4 +46,25 @@ class AccountClubForm(ModelForm):
         fields = [
             'rakeback_percentage',
             'chip_value',
+        ]
+
+
+class UploadFileForm(forms.Form):
+
+    file = forms.FileField(label="Upload Agent Report",
+                           help_text="Upload report")
+
+
+class UserForm(ModelForm):
+    password = forms.CharField(max_length=32, widget=forms.PasswordInput)
+    password2 = forms.CharField(
+        max_length=32, widget=forms.PasswordInput, label="Repeat password")
+
+    class Meta:
+        model = User
+        fields = [
+            'username',
+            'password',
+            'password2',
+            'email',
         ]

@@ -61,9 +61,9 @@ class Account(models.Model):
     nickname = models.CharField(max_length=64)
     club_account_id = models.IntegerField()
     agent_players = models.ManyToManyField(
-        AgentPlayer, related_name="accounts")
+        AgentPlayer, related_name="accounts", blank=True)
     clubs = models.ManyToManyField(
-        Club, through='AccountClub', related_name='accounts')
+        Club, through='AccountClub', related_name='accounts', blank=True)
 
     def __str__(self):
         return f"{self.nickname} ({self.club_account_id})"
@@ -75,8 +75,8 @@ class AccountClub(models.Model):
     club = models.ForeignKey(
         Club, on_delete=models.CASCADE, related_name='account_deal')
     rakeback_percentage = models.DecimalField(
-        max_digits=3, decimal_places=3, validators=[MinValueValidator(Decimal('0.01'))])
-    chip_value = models.DecimalField(max_digits=3, decimal_places=2, validators=[
+        max_digits=3, decimal_places=3, validators=[MinValueValidator(Decimal('0.0'))])
+    chip_value = models.DecimalField(max_digits=5, decimal_places=2, validators=[
                                      MinValueValidator(Decimal('0.01'))])
 
     def __str__(self):

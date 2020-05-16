@@ -1,7 +1,7 @@
 from agents.models import Account, AgentPlayer
 from decimal import Decimal
 from django.http import Http404
-from accounting_engine.models import AccountReport
+from accounting_engine.models import Report
 
 
 def calculate_account_rakeback(rakeback_percent, rake):
@@ -19,6 +19,9 @@ def calculate_agent_rakeback(agent_rakeback_percent, rake, account_rakeback):
     agent_rakeback = round(
         ((agent_rakeback_percent * rake) - account_rakeback), 2)
     return agent_rakeback
+
+
+# def generate_report_from_csv(data):
 
 
 def generate_report(data, agent_id):
@@ -54,7 +57,7 @@ def generate_report(data, agent_id):
         )
 
         try:
-            account_report = AccountReport(
+            account_report = Report(
                 gross_winloss=gross_winloss,
                 total_rake=total_rake,
                 rakeback_earnings=rakeback_earnings,

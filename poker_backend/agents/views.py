@@ -1,16 +1,18 @@
 from django.shortcuts import render
 from .create import createAgent
 #from rest_framework import viewsets, permissions
-from .serializers import AgentPlayerSerializer, AccountSerializer
+from .serializers import AgentPlayerSerializer, CreateAccountSerializer, AccountClubSerializer
 from django.http import JsonResponse, HttpResponseRedirect, Http404
 from rest_framework.parsers import FormParser
-from agents.models import AccountClub, AgentPlayer
+from agents.models import AccountClub, AgentPlayer, Club, Account
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status, permissions, generics
 from rest_framework.views import APIView
 from .permissions import isOwnerOrReadOnly
+from users.forms import AccountForm
+from django.urls import reverse
 
 #
 #from django.contrib.auth.models import User
@@ -114,23 +116,87 @@ def create_agent_player(request):
     return JsonResponse(serializer.errors, status=400)
 """
 
+"""
+class AccountList(APIView):
+    def post(self, request, format=None):
+"""
 
+"""
 def create_account(request):
     data = FormParser().parse(request)
-    rakeback = data.rakeback_percentage
-    chip_value = data.chip_value
-    account_data = {
-        'nickname': data.nickname,
-        'club_account_id': data.club_account_id,
-    }
+    nickname = data['nickname']
+    club_account_id = data['club_account_id']
+    agent_player_id = data['agent_players']
+    club_id = data['clubs']
+    rakeback_percentage = data['rakeback_percentage']
+    chip_value = data['chip_value']
+    account = Account(nickname=nickname, club_account_id=club_account_id)
+    account.save()
+    agent_player = AgentPlayer.objects.get(pk=agent_player_id)
+    account.agent_players += agent_player
+    club = Club.objects.get(pk=club_id)
+    account.clubs += club
+    account_club = AccountClub(account=account.id, club=club.id,
+                               rakeback_percentage=rakeback_percentage, chip_value=chip_value)
+    account_club.save()
+"""
 
-    serializer = AccountSerializer(data=data)
-    if serializer.is_valid():
-        serializer.save()
-        # account_club = AccountClub(account=serializer.)
+
+def create_account(request):
+    if request.method == 'POST':
+        data = FormParser().parse(request)
+        serializer = CreateAccountSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            next = request.POST.get('next', '/')
+            return HttpResponseRedirect(reverse('index'))
+        return JsonResponse(serializer.errors, status=400)
+
+
+def create_account_ori(request):
+    if request.method == 'POST':
+        #form = AccountForm(request.POST)
+        #data = FormParser().parse(request)
+        print(request.POST)
+        nickname = request.POST['nickname']
+        club_account_id = request.POST['club_account_id']
+        rakeback_percentage = request.POST['rakeback_percentage']
+        chip_value = request.POST['chip_value']
+        account = Account(nickname=nickname,
+                          club_account_id=club_account_id)
+        account.save()
+        try:
+            agent = AgentPlayer.objects.get(pk=request.POST['agent_players'])
+        except AgentPlayer.DoesNotExist:
+            return Http404("Agent does not exist")
+
+        account.agent_players.add(agent)
+        try:
+            club = Club.objects.get(pk=request.POST['clubs'])
+        except Club.DoesNotExist:
+            return Http404
+
+        account_club = AccountClub(
+            rakeback_percentage=rakeback_percentage, chip_value=chip_value, account=account, club=club)
+        account_club.save()
         next = request.POST.get('next', '/')
         return HttpResponseRedirect(next, status=201)
-    return JsonResponse(serializer.errors, status=400)
+        #rakeback_percentage = data['rakeback_percentage']
+        #serializer = AccountSerializer(data=data)
+        #print("serializer created")
+        # if serializer.is_valid():
+        #print("serializer is valid")
+        # print(repr(serializer))
+        #account = serializer.save()
+        #print("account serializer saved")
+        # print(data)
+        #serializer = AccountClubSerializer(data=data)
+        # if serializer.is_valid():
+        #    serializer.save()
+        #print('accountclubserializer saved')
+        #next = request.POST.get('next', '/')
+        # return HttpResponseRedirect(next, status=201)
+        # return JsonResponse(serializer.errors, status=400)
 
 
 # @api_view(['POST'])

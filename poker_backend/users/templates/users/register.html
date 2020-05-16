@@ -1,5 +1,6 @@
-{% extends "users/base.html" %} {% block title %} Registration page {%endblock%}
-{% block body %} {% if message %} {{ message }} {% endif %}
+{% extends "users/base.html" %} {% load crispy_forms_tags %}{% block title %}
+Registration page {%endblock%} {% block body %} {% if message %} {{ message }}
+{% endif %}
 <div>
   <h3>Register</h3>
   {% if message %} {{ message }}{% endif %}
@@ -18,6 +19,13 @@
       name="password_confirmation"
       placeholder="Repeat Password"
     />
+    <input type="submit" value="Register" />
+  </form>
+</div>
+
+<div>
+  <form action="{% url 'register' %}" method="POST">
+    {% csrf_token %} {{ form|crispy}}
     <input type="submit" value="Register" />
   </form>
 </div>

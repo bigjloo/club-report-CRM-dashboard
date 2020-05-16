@@ -17,6 +17,7 @@
     {% for agent in user.agent_players.all %}
     <li>
       {{ agent }}
+
       <p>Accounts</p>
       <ul>
         {% for account in agent.accounts.all %}
@@ -26,6 +27,12 @@
     </li>
     {% endfor %}
   </ul>
+</div>
+
+<div>
+  <form action="/" method="POST">
+    {{upload_form|crispy}}
+  </form>
 </div>
 
 <div>
