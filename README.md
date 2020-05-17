@@ -8,3 +8,10 @@ update user dashboard view
 create agent/player/account
 
 note feature
+
+requirements
+django
+django rest framework
+bootstrap 4
+django bootstrap datepicker plus
+crispy forms
