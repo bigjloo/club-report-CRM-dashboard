@@ -2,13 +2,38 @@ from django.shortcuts import render
 from .models import Report
 from django.contrib.auth.models import User
 from decimal import Decimal
-from django.http import Http404, HttpResponseRedirect, HttpResponse
+from django.http import Http404, HttpResponseRedirect, HttpResponse, JsonResponse
 from django.urls import reverse
-from .engine import generate_report
+from .engine import generate_report, get_report
 from agents.models import Account, AgentPlayer, Club
 from .serializers import ReportSerializer
-from rest_framework.parsers import JSONParser
+from rest_framework.parsers import JSONParser, FormParser
+from .forms import DateForm
+from django.views import View
+
+
 # Create your views here.
+
+
+class ReportView(View):
+    def post(self, request):
+        form = DateForm(request.POST)
+        if form.is_valid():
+            user = request.user
+            start_date = form.cleaned_data['start_date']
+            end_date = form.cleaned_data['end_date']
+            reports = get_report(start_date, end_date, user)
+            context = {
+                'form': DateForm(),
+                'reports': reports
+            }
+
+            return render(request, 'reports/reports.html', context)
+
+    def get(self, request):
+        form = DateForm()
+        return render(request, 'reports/reports.html', {'form': form})
+
 
 json_sample = [
     {
@@ -324,6 +349,10 @@ def create_report_view(request):
         serializer = ReportSerializer(data=row)
         if serializer.is_valid():
             report = serializer.save()
+            club_deal = account.club_deal.get(club=club)
+            report.rakeback = club_deal.rakeback_percentage * report.total_rake
+            report.net_winloss = report.gross_winloss + report.rakeback
+            report.net_winloss_fiat = club_deal.chip_value * report.net_winloss
             report.agent_player = agent_player
             report.account = account
             report.club = club
@@ -334,91 +363,6 @@ def create_report_view(request):
     return HttpResponseRedirect(reverse('index'))
 
 
-def create_report_view3(request):
-    json_data = json_sample
-    for row in json_data:
-        try:
-            agent_player_id = int(row.pop('agent_player'))
-            agent_player = AgentPlayer.objects.get(code=agent_player_id)
-        except AgentPlayer.DoesNotExist:
-            raise Http404
-        try:
-            club_id = int(row.pop('club'))
-            club = Club.objects.get(club_id=club_id)
-        except Club.DoesNotExist:
-            raise Http404
-        try:
-            club_account_id = int(row.pop('account'))
-            account = Account.objects.get(club_account_id=club_account_id)
-        except Account.DoesNotExist:
-            raise Http404
-        serializer = ReportSerializer(data=row)
-        if serializer.is_valid():
-            report = serializer.save()
-            report.agent_player = agent_player
-            report.account = account
-            report.club = club
-            report.save()
-        else:
-            print(serializer.errors)
-            raise Http404("serializer not valid")
-    return HttpResponseRedirect(reverse('index'))
-
-
-def create_report_view2(request):
-    """ sample data """
-    json_sample = [
-        {
-            "club": 21872,
-            "nickname": "Bangalilove",
-            "account": 53015,
-            "agent_player": 43333,
-            "gross_winloss": -52.56,
-            "total_rake": 1175.35,
-            "insurance": 0,
-            "jackpot": 0,
-            "hands": 127,
-        },
-        {
-            "club": 21872,
-            "nickname": "Sammyfarhana",
-            "account": 57410,
-            "agent_player": 43333,
-            "gross_winloss": 315.39,
-            "total_rake": 1175.35,
-            "insurance": 0,
-            "jackpot": 0,
-            "hands": 893
-        }
-    ]
-
-    if request.method == 'GET':
-
-        json_data = json_sample
-        for row in json_data:
-            try:
-                agent_player_id = int(row.pop('agent_player'))
-                agent_player = AgentPlayer.objects.get(code=agent_player_id)
-            except AgentPlayer.DoesNotExist:
-                raise Http404
-            try:
-                club_id = int(row.pop('club'))
-                club = Club.objects.get(club_id=club_id)
-            except Club.DoesNotExist:
-                raise Http404
-            try:
-                club_account_id = int(row.pop('account'))
-                account = Account.objects.get(club_account_id=club_account_id)
-            except Account.DoesNotExist:
-                raise Http404
-            serializer = ReportSerializer(data=row)
-            if serializer.is_valid():
-                report = serializer.save()
-                report.agent_player = agent_player
-                report.account = account
-                report.club = club
-                report.save()
-            else:
-                print(serializer.errors)
-                raise Http404("serializer not valid")
-        return HttpResponseRedirect(reverse('index'))
+def report_view(request):
+    form = DateForm()
+    return render(request, 'reports/reports.html', {'form': form})

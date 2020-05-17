@@ -11,6 +11,10 @@ class Report(models.Model):
         max_digits=7, decimal_places=2, blank=True, null=True)
     jackpot = models.DecimalField(
         max_digits=7, decimal_places=2, blank=True, null=True)
+    rakeback = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    net_winloss = models.DecimalField(
+        max_digits=7, decimal_places=2, null=True, blank=True)
+    net_winloss_fiat = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
     hands = models.IntegerField(blank=True, null=True)
     created = models.DateField(auto_now_add=True)
     agent_player = models.ForeignKey(
@@ -21,7 +25,7 @@ class Report(models.Model):
         Club, on_delete=models.SET_NULL,  null=True, related_name="reports", blank=True)
 
     def __str__(self):
-        return f"W/L: {self.gross_winloss} | RAKE: {self.total_rake} "
+        return f"{self.account}: W/L: {self.gross_winloss} | RAKE: {self.total_rake} "
 
 
 # class AgentReport(models.Model):

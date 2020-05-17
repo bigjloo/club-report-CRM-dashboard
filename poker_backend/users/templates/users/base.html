@@ -1,13 +1,42 @@
 <!DOCTYPE html>
 <html>
   <head>
-    {% load bootstrap4 %} {% bootstrap_css %}
-
+    {% load bootstrap4 %} {% bootstrap_css %} {%bootstrap_javascript jquery%}
     <title>{% block title %} {% endblock %}</title>
     {% block script %} {% endblock %}
   </head>
   <body>
     <div class="container">
+      <nav class="navbar navbar-expand-md navbar-light bg-light">
+        <a href="#" class="navbar-brand">Brand</a>
+        <button
+          type="button"
+          class="navbar-toggler"
+          data-toggle="collapse"
+          data-target="#navbarCollapse"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <div class="navbar-nav">
+            <a href="{% url 'index' %}" class="nav-item nav-link active"
+              >Home</a
+            >
+            <a href="#" class="nav-item nav-link">Add Agent/Player</a>
+            <a href="#" class="nav-item nav-link">Add Account</a>
+            <a
+              href="{% url 'reports'%}"
+              class="nav-item nav-link disabled"
+              tabindex="-1"
+              >Reports</a
+            >
+          </div>
+          <div class="navbar-nav ml-auto">
+            <a href="#" class="nav-item nav-link">Login</a>
+          </div>
+        </div>
+      </nav>
       {% block body %} {% endblock %}
     </div>
   </body>
