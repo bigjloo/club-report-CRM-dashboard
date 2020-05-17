@@ -8,7 +8,7 @@ class AgentPlayerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AgentPlayer
-        fields = "__all__"
+        exclude = ["user"]
 
 
 class ClubSerializer(serializers.ModelSerializer):

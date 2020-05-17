@@ -2,6 +2,7 @@ from agents.models import Account, AgentPlayer
 from decimal import Decimal
 from django.http import Http404
 from accounting_engine.models import Report
+from .serializers import ReportSerializer
 
 
 def calculate_account_rakeback(rakeback_percent, rake):
@@ -22,6 +23,17 @@ def calculate_agent_rakeback(agent_rakeback_percent, rake, account_rakeback):
 
 
 # def generate_report_from_csv(data):
+def get_report(start_date, end_date, user):
+    reports = {}
+    try:
+        agent_players = user.agent_players.all()
+    except AgentPlayer.DoesNotExist:
+        return Http404('Error retrieving agent players')
+    for agent_player in agent_players:
+        agent_player_reports = agent_player.reports.filter(
+            created__range=[start_date, end_date])
+        reports[f'{agent_player}'] = agent_player_reports
+    return reports
 
 
 def generate_report(data, agent_id):

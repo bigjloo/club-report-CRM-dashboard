@@ -5,11 +5,41 @@
 </div>
 <div>
   <h3>Clubs</h3>
-  <ul>
+  
     {% for club in clubs %}
     <li>{{ club }}</li>
     {% endfor %}
   </ul>
+  <table>
+    <thead>
+      <tr>
+        <th>Platform</th>
+        <th>Name</th>
+        <th>Code</th>
+        <th>Club ID</th>
+        <th>Chip Value</th>
+        <th>Rakeback</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for club in clubs %}
+      <tr>
+        <td>{{ club.platform}}</td>
+        <td>{{ club.name }}</td>
+        <td>{{ club.code }}</td>
+        <td>{{ club.id }}</td>
+        <td>{{ club.chip_value }}</td>
+        <td>{{ club.rakeback}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+
+    </tr>
+  </table>
+</div>
+
+<div>
+  <button><a href="{% url 'reports' %}">Reports</a></button>
 </div>
 <div>
   <h3>Agent Players</h3>
