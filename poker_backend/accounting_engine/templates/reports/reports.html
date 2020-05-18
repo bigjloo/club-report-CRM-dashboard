@@ -2,7 +2,6 @@
 bootstrap_jquery_url %} {% block script %}
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    alert("document loaded");
     const tables = document.querySelectorAll("table");
     tables.forEach((table) => {
       const row_nets = table.getElementsByClassName("net");
@@ -16,8 +15,6 @@ bootstrap_jquery_url %} {% block script %}
       cell_total.innerHTML = "<strong>Total<strong>";
       cell_sum.innerHTML = `${sum} MYR`;
     });
-
-    function total_net() {}
   });
 </script>
 {%endblock%} {% block title %} Reports page {%endblock%} {% block body %}

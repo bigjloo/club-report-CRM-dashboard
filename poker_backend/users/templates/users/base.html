@@ -3,12 +3,12 @@
   <head>
     {% load bootstrap4 %} {% bootstrap_css %} {%bootstrap_javascript jquery%}
     <title>{% block title %} {% endblock %}</title>
-    {% block script %} {% endblock %}
+    {% block script %} {% endblock %} {% block style%} {% endblock%}
   </head>
   <body>
     <div class="container">
       <nav class="navbar navbar-expand-md navbar-light bg-light">
-        <a href="#" class="navbar-brand">Brand</a>
+        <a href="{% url 'index' %}" class="navbar-brand">PokerPA</a>
         <button
           type="button"
           class="navbar-toggler"
@@ -33,7 +33,11 @@
             >
           </div>
           <div class="navbar-nav ml-auto">
+            {% if request.user.is_authenticated %}
+            <a href="{% url 'logout' %}" class="nav-item nav-link">Logout</a>
+            {% else %}
             <a href="#" class="nav-item nav-link">Login</a>
+            {% endif %}
           </div>
         </div>
       </nav>

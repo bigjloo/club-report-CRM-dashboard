@@ -1,11 +1,37 @@
 {% extends "users/base.html" %} {% block title %} {{ user }} {% endblock %}
-{%block script%} {%endblock%} {% load crispy_forms_tags %} {%block body%}
+{%block script%} 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const accounts_btn = document.querySelectorAll('.accounts_button')
+  accounts_btn.forEach((button) => {
+    button.onclick = function(){
+      alert("hello");
+      const divs = document.querySelectorAll('.accounts_div');
+      if (divs.style.display === "none") {
+        divs.style.display = "block";
+      }else{
+        divs.style.display = "none";
+      }
+    }
+  })
+})
+
+</script>
+{%endblock%} 
+{% load crispy_forms_tags %} 
+{% block style %}
+<style>
+
+</style>
+{% endblock %}
+
+
+{%block body%}
 <div>
-  <h3>Welcome {{ user.username}}</h3>
+  <p class='display-4'>Welcome {{ user.username}}</p>
 </div>
 <div>
   <h3>Clubs</h3>
-  
   <table class="table">
     <thead>
       <tr>
@@ -31,50 +57,64 @@
     </tr>
   </table>
 </div>
-<div>
-  <h3>Agent Players</h3>
-  <ul>
-    {% for agent in user.agent_players.all %}
-    <li>
-      {{ agent }}
 
-      <p>Accounts</p>
+<div class='row'>
+  <div class='col-md-6'>
+    <div>
+      <h3>Agent Players</h3>
       <ul>
-        {% for account in agent.accounts.all %}
-        <li>{{ account }}</li>
+        {% for agent in user.agent_players.all %}
+        <li>
+          <div class="agentplayer_div">
+            <button class="accounts_button">{{ agent }}</button>
+            <div class='accounts_div' style="display: none">
+              <p>Accounts</p>
+              <ul>
+                {% for account in agent.accounts.all %}
+                <li>{{ account }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </li>
         {% endfor %}
       </ul>
-    </li>
-    {% endfor %}
-  </ul>
-</div>
+    </div>
+  </div>
+  <div class='col-md-6'>
+    <h3>Action</h3>
+    <div>
+      <button>Upload file</button>
+      <div id="file_upload_div" style="display: none">
+        <form id="file_upload_form" action="{% url 'upload_file' %}" method="POST" enctype="multipart/form-data" >
+          {% csrf_token %}
+          {{upload_form|crispy}}
+          <input type="submit" value="Upload">
+        </form>
+      </div>
+    </div>
 
-<div>
-  <form action="{% url 'upload_file' %}" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{upload_form|crispy}}
-    <input type="submit" value="Upload">
-  </form>
-</div>
+    <div>
+      <button>Add New Agent/Player</button>
+      <div id="create_agent_div" style="display: none">
+        <form id="create_agent_form" action="{% url 'create_agent' %}" method="POST">
+          {% csrf_token %} {{ agent_form|crispy }}
+          <input type="hidden" name="next" value="{{ request.path }}" />
+          <input type="submit" class="btn btn-primary" value="Add Agent" />
+        </form>
+      </div>
+    </div>
 
-<div>
-  <form action="{% url 'create_agent' %}" method="POST">
-    {% csrf_token %} {{ agent_form|crispy }}
-    <input type="hidden" name="next" value="{{ request.path }}" />
-    <input type="submit" class="btn btn-primary" value="Add Agent" />
-  </form>
+    <div>
+      <button>Add New Account</button>
+      <div id="create_agent_div" style="display: none">
+        <form id="create_account_form" action="{% url 'create_account' %}" method="POST">
+          {% csrf_token %} {{ account_form|crispy }}
+          <input type="hidden" name="next" value="{{ request.path }}" />
+          <input type="submit" class="btn btn-primary" value="Add Account" />
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
-
-<div>
-  <form action="{% url 'create_account' %}" method="POST">
-    {% csrf_token %} {{ account_form|crispy }}
-    <input type="hidden" name="next" value="{{ request.path }}" />
-    <input type="submit" class="btn btn-primary" value="Add Account" />
-  </form>
-</div>
-<div>
-  <a href="{% url 'create_report' %}">test create record</a>
-</div>
-
-<a href="{% url 'logout' %}">logout</a>
 {% endblock %}
