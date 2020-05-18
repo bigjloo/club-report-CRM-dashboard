@@ -14,6 +14,7 @@ from users.forms import UploadFileForm
 import csv
 import json
 from rest_framework.views import APIView
+from users.forms import AccountForm, AgentPlayerForm, UploadFileForm
 # Create your views here.
 
 
@@ -34,9 +35,15 @@ class ReportView(View):
             start_date = form.cleaned_data['start_date']
             end_date = form.cleaned_data['end_date']
             reports = get_report(start_date, end_date, user)
+            agent_player_form = AgentPlayerForm()
+            account_form = AccountForm(user)
+            upload_form = UploadFileForm()
             context = {
                 'form': DateForm(),
-                'reports': reports
+                'reports': reports,
+                "agent_form": agent_player_form,
+                "account_form": account_form,
+                'upload_form': upload_form,
             }
 
             return render(request, 'reports/reports.html', context)

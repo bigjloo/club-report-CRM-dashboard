@@ -1,4 +1,4 @@
-{% extends "users/base.html" %} {% block title %} {{ user }} {% endblock %}
+{% extends "users/base.html" %} {%load crispy_forms_tags %}{% block title %} {{ user }} {% endblock %}
 {%block script%} 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 </script>
 {%endblock%} 
-{% load crispy_forms_tags %} 
+
 {% block style %}
 <style>
 ul {
@@ -44,6 +44,7 @@ h3 {
 <div>
   <p class='display-4'>Welcome {{ user.username}}</p>
 </div>
+
 <div>
   <h3>Clubs</h3>
   <table class="table">
@@ -80,12 +81,19 @@ h3 {
         {% for agent in user.agent_players.all %}
         <li>
           <div class="hidden_div">
-            <button class="untoggle_button btn btn-primary btn-block">{{ agent }}</button>
+            <button class="untoggle_button btn btn-primary btn-block">{{ agent }} 
+              <form action="{% url 'agent_player_detail' agent.id %}" method="DELETE">
+                {% csrf_token %}
+                <button type="submit" class="close">&times;</button>
+              </form>
+            </button>
             <div class='toggle_div' style="display: none">
               <strong>Accounts</strong>
               <ul>
                 {% for account in agent.accounts.all %}
-                <li>{{ account }}</li>
+                <li>{{ account }} <button type="button" class="close">
+                  <a href="{% url 'agent_destroy' agent %">&times;</a>
+                </button></li>
                 {% endfor %}
               </ul>
             </div>
@@ -131,4 +139,6 @@ h3 {
     </div>
   </div>
 </div>
+
+
 {% endblock %}

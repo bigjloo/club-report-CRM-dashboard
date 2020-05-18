@@ -2,10 +2,12 @@
 <html>
   <head>
     {% load bootstrap4 %} {% bootstrap_css %} {%bootstrap_javascript jquery%}
+
     <title>{% block title %} {% endblock %}</title>
     {% block script %} {% endblock %} {% block style%} {% endblock%}
   </head>
   <body>
+    {%load crispy_forms_tags %}
     <div class="container">
       <nav class="navbar navbar-expand-md navbar-light bg-light">
         <a href="{% url 'index' %}" class="navbar-brand">PokerPA</a>
@@ -23,8 +25,27 @@
             <a href="{% url 'index' %}" class="nav-item nav-link active"
               >Home</a
             >
-            <a href="#" class="nav-item nav-link">Add Agent/Player</a>
-            <a href="#" class="nav-item nav-link">Add Account</a>
+            <a
+              href="#"
+              class="nav-item nav-link"
+              data-toggle="modal"
+              data-target="#agent_player_modal"
+              >Add Agent/Player</a
+            >
+            <a
+              href="#"
+              class="nav-item nav-link"
+              data-toggle="modal"
+              data-target="#account_modal"
+              >Add Account</a
+            >
+            <a
+              href="#"
+              class="nav-item nav-link"
+              data-toggle="modal"
+              data-target="#upload_file_modal"
+              >Upload Report</a
+            >
             <a
               href="{% url 'reports'%}"
               class="nav-item nav-link disabled"
@@ -41,6 +62,120 @@
           </div>
         </div>
       </nav>
+
+      <!-- Modal -->
+      <div id="agent_player_modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Add Agent/Player</h4>
+              <button type="button" class="close" data-dismiss="modal">
+                &times;
+              </button>
+            </div>
+            <div class="modal-body">
+              <form
+                id="create_agent_form"
+                action="{% url 'create_agent' %}"
+                method="POST"
+              >
+                {% csrf_token %} {{ agent_form|crispy }}
+                <input type="hidden" name="next" value="{{ request.path }}" />
+                <input
+                  type="submit"
+                  class="btn btn-primary btn-block"
+                  value="Add"
+                />
+              </form>
+            </div>
+
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-default"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="upload_file_modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Upload File</h4>
+              <button type="button" class="close" data-dismiss="modal">
+                &times;
+              </button>
+            </div>
+            <div class="modal-body">
+              <form
+                id="file_upload_form"
+                action="{% url 'upload_file' %}"
+                method="POST"
+                enctype="multipart/form-data"
+              >
+                {% csrf_token %} {{upload_form|crispy}}
+                <input type="submit" class="btn btn-primary" value="Upload" />
+              </form>
+            </div>
+
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-default"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="account_modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Add New Account</h4>
+              <button type="button" class="close" data-dismiss="modal">
+                &times;
+              </button>
+            </div>
+            <div class="modal-body">
+              <form
+                id="create_account_form"
+                action="{% url 'create_account' %}"
+                method="POST"
+              >
+                {% csrf_token %} {{ account_form|crispy }}
+                <input type="hidden" name="next" value="{{ request.path }}" />
+                <input
+                  type="submit"
+                  class="btn btn-primary btn-block"
+                  value="Add Account"
+                />
+              </form>
+            </div>
+
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-default"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
       {% block body %} {% endblock %}
     </div>
   </body>

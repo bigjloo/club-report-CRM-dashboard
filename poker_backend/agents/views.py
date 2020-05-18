@@ -52,7 +52,10 @@ class AgentPlayerList(generics.ListCreateAPIView):
 class AgentPlayerDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = AgentPlayer.objects.all()
     serializer_class = AgentPlayerSerializer
-    #permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly,
+        isOwnerOrReadOnly,
+    ]
 
     def get_queryset(self):
         user = self.request.user
