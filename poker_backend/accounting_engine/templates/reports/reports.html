@@ -1,6 +1,25 @@
 {% extends 'users/base.html' %} {% load crispy_forms_tags %}{%
 bootstrap_jquery_url %} {% block script %}
-<script></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    alert("document loaded");
+    const tables = document.querySelectorAll("table");
+    tables.forEach((table) => {
+      const row_nets = table.getElementsByClassName("net");
+      var sum = 0;
+      for (var i = 0; i < row_nets.length; i++) {
+        sum += parseInt(row_nets[i].innerHTML);
+      }
+      const row = table.insertRow();
+      const cell_total = row.insertCell(0);
+      const cell_sum = row.insertCell(1);
+      cell_total.innerHTML = "<strong>Total<strong>";
+      cell_sum.innerHTML = `${sum} MYR`;
+    });
+
+    function total_net() {}
+  });
+</script>
 {%endblock%} {% block title %} Reports page {%endblock%} {% block body %}
 
 <h3>Reports</h3>
@@ -14,7 +33,7 @@ bootstrap_jquery_url %} {% block script %}
 
 <div>
   {% for agent, reports in reports.items %}
-  <h2>{{ agent }}</h2>
+  <h3>{{ agent }}</h3>
   <table class="table">
     <thead>
       <tr>
@@ -30,13 +49,13 @@ bootstrap_jquery_url %} {% block script %}
     <tbody>
       {% for report in reports %}
       <tr>
-        <th>{{ report.club}}</th>
+        <td>{{ report.club}}</td>
         <td>{{report.account}}</td>
         <td>{{ report.gross_winloss}}</td>
         <td>{{ report.total_rake}}</td>
         <td>{{ report.rakeback }}</td>
         <td>{{ report.net_winloss}}</td>
-        <td>{{ report.net_winloss_fiat}}</td>
+        <td><span class="net">{{ report.net_winloss_fiat}}</span></td>
       </tr>
       {% endfor %}
     </tbody>

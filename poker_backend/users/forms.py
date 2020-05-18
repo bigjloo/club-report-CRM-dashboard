@@ -51,7 +51,7 @@ class AccountClubForm(ModelForm):
 
 class UploadFileForm(forms.Form):
 
-    file = forms.FileField(label="Upload Agent Report",
+    file = forms.FileField(label="Upload Report",
                            help_text="Upload report")
 
 

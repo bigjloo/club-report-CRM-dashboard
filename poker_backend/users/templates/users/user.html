@@ -6,19 +6,14 @@
 <div>
   <h3>Clubs</h3>
   
-    {% for club in clubs %}
-    <li>{{ club }}</li>
-    {% endfor %}
-  </ul>
-  <table>
+  <table class="table">
     <thead>
       <tr>
         <th>Platform</th>
         <th>Name</th>
         <th>Code</th>
         <th>Club ID</th>
-        <th>Chip Value</th>
-        <th>Rakeback</th>
+        <th>Chip : MYR</th>
       </tr>
     </thead>
     <tbody>
@@ -27,19 +22,14 @@
         <td>{{ club.platform}}</td>
         <td>{{ club.name }}</td>
         <td>{{ club.code }}</td>
-        <td>{{ club.id }}</td>
+        <td>{{ club.club_id }}</td>
         <td>{{ club.chip_value }}</td>
-        <td>{{ club.rakeback}}</td>
       </tr>
       {% endfor %}
     </tbody>
 
     </tr>
   </table>
-</div>
-
-<div>
-  <button><a href="{% url 'reports' %}">Reports</a></button>
 </div>
 <div>
   <h3>Agent Players</h3>
@@ -60,8 +50,10 @@
 </div>
 
 <div>
-  <form action="/" method="POST">
+  <form action="{% url 'upload_file' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
     {{upload_form|crispy}}
+    <input type="submit" value="Upload">
   </form>
 </div>
 

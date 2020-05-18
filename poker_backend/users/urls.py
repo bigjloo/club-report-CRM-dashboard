@@ -8,6 +8,7 @@ urlpatterns = [
     path('logout', views.logout_view, name="logout"),
     path('create_agent/', include('agents.urls')),
     path('create_account/', include('agents.urls')),
+    path('', include('accounting_engine.urls')),
 ]
 
 #path('upload_report', include('accounting_engine.urls')),

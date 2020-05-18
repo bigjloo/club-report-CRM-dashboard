@@ -1,8 +1,10 @@
-from agents.models import Account, AgentPlayer
+from agents.models import Account, AgentPlayer, Club
 from decimal import Decimal
 from django.http import Http404
 from accounting_engine.models import Report
 from .serializers import ReportSerializer
+import json
+import csv
 
 
 def calculate_account_rakeback(rakeback_percent, rake):
@@ -22,7 +24,24 @@ def calculate_agent_rakeback(agent_rakeback_percent, rake, account_rakeback):
     return agent_rakeback
 
 
-# def generate_report_from_csv(data):
+def csvsfile_to_json(file):
+    json_data = []
+    rows = []
+    for row in file:
+        cleaned_row = row.decode('UTF-8').rstrip('\r\n')
+        rows.append(cleaned_row)
+    headers = rows.pop(0).split(',')
+    number_of_columns = len(headers)
+    number_of_rows = len(rows)
+    for i in range(number_of_rows):
+        record = {}
+        current_row = rows[i].split(',')
+        for j in range(number_of_columns):
+            record[headers[j]] = current_row[j]
+        json_data.append(record)
+    process_report(json_data)
+
+
 def get_report(start_date, end_date, user):
     reports = {}
     try:
@@ -34,6 +53,39 @@ def get_report(start_date, end_date, user):
             created__range=[start_date, end_date])
         reports[f'{agent_player}'] = agent_player_reports
     return reports
+
+
+def process_report(json_data):
+    for row in json_data:
+        try:
+            agent_player_id = row.pop('agent_player')
+            agent_player = AgentPlayer.objects.get(code=agent_player_id)
+        except AgentPlayer.DoesNotExist:
+            raise Http404("Agent does not exist")
+        try:
+            club_id = row.pop('club')
+            club = Club.objects.get(club_id=club_id)
+        except Club.DoesNotExist:
+            raise Http404("Club does not exist")
+        try:
+            club_account_id = row.pop('account')
+            account = Account.objects.get(club_account_id=club_account_id)
+        except Account.DoesNotExist:
+            raise Http404("Account does not exist")
+        serializer = ReportSerializer(data=row)
+        if serializer.is_valid():
+            report = serializer.save()
+            club_deal = account.club_deal.get(club=club)
+            report.rakeback = club_deal.rakeback_percentage * report.total_rake
+            report.net_winloss = report.gross_winloss + report.rakeback
+            report.net_winloss_fiat = club_deal.chip_value * report.net_winloss
+            report.agent_player = agent_player
+            report.account = account
+            report.club = club
+            report.save()
+        else:
+            print(serializer.errors)
+            raise Http404("serializer not valid")
 
 
 def generate_report(data, agent_id):
