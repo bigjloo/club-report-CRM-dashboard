@@ -37,8 +37,10 @@ def create_agent_player(request):
 class AgentPlayerList(generics.ListCreateAPIView):
     queryset = AgentPlayer.objects.all()
     serializer_class = AgentPlayerSerializer
-    # permission_classes = [
-    #    permissions.IsAuthenticatedOrReadOnly, isOwnerOrReadOnly]
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly,
+        isOwnerOrReadOnly,
+    ]
     # add permission class here
 
     def perform_create(self, serializer):

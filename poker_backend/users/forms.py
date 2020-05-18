@@ -16,8 +16,6 @@ class AgentPlayerForm(ModelForm):
         super(AgentPlayerForm, self).__init__(*args, **kwargs)
         CHOICES = [(1, 'Agent'), (0, 'Player')]
         self.fields['code'].help_text = 'Use Agent ID for agents'
-        #self.fields['agent'].choices = CHOICES
-        #self.fields['agent'].widget = forms.CheckboxInput
 
 
 class AccountForm(ModelForm):

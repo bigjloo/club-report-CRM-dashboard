@@ -2,25 +2,39 @@
 {%block script%} 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  const accounts_btn = document.querySelectorAll('.accounts_button')
-  accounts_btn.forEach((button) => {
-    button.onclick = function(){
-      alert("hello");
-      const divs = document.querySelectorAll('.accounts_div');
-      if (divs.style.display === "none") {
-        divs.style.display = "block";
+  document.querySelectorAll('.hidden_div').forEach((div) => {
+    div.querySelector('.untoggle_button').onclick = () => {
+      const accounts = div.querySelector('.toggle_div')
+      if (accounts.style.display === 'none') {
+        accounts.style.display = "block";
       }else{
-        divs.style.display = "none";
+        accounts.style.display = "none";
       }
     }
   })
+
+
 })
+
 
 </script>
 {%endblock%} 
 {% load crispy_forms_tags %} 
 {% block style %}
 <style>
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.hidden_div {
+  padding: 2px;
+}
+
+h3 {
+  text-align: center;
+}
 
 </style>
 {% endblock %}
@@ -39,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <th>Name</th>
         <th>Code</th>
         <th>Club ID</th>
-        <th>Chip : MYR</th>
+        <th>MYR</th>
       </tr>
     </thead>
     <tbody>
@@ -65,10 +79,10 @@ document.addEventListener("DOMContentLoaded", () => {
       <ul>
         {% for agent in user.agent_players.all %}
         <li>
-          <div class="agentplayer_div">
-            <button class="accounts_button">{{ agent }}</button>
-            <div class='accounts_div' style="display: none">
-              <p>Accounts</p>
+          <div class="hidden_div">
+            <button class="untoggle_button btn btn-primary btn-block">{{ agent }}</button>
+            <div class='toggle_div' style="display: none">
+              <strong>Accounts</strong>
               <ul>
                 {% for account in agent.accounts.all %}
                 <li>{{ account }}</li>
@@ -83,35 +97,35 @@ document.addEventListener("DOMContentLoaded", () => {
   </div>
   <div class='col-md-6'>
     <h3>Action</h3>
-    <div>
-      <button>Upload file</button>
-      <div id="file_upload_div" style="display: none">
+    <div class="hidden_div">
+      <button class="untoggle_button btn btn-secondary btn-block">Upload Report</button>
+      <div class='toggle_div' style="display: none">
         <form id="file_upload_form" action="{% url 'upload_file' %}" method="POST" enctype="multipart/form-data" >
           {% csrf_token %}
           {{upload_form|crispy}}
-          <input type="submit" value="Upload">
+          <input type="submit" class="btn btn-primary" value="Upload">
         </form>
       </div>
     </div>
 
-    <div>
-      <button>Add New Agent/Player</button>
-      <div id="create_agent_div" style="display: none">
+    <div class="hidden_div">
+      <button class="untoggle_button btn btn-secondary btn-block">Add New Agent/Player</button>
+      <div class='toggle_div' style="display: none">
         <form id="create_agent_form" action="{% url 'create_agent' %}" method="POST">
           {% csrf_token %} {{ agent_form|crispy }}
           <input type="hidden" name="next" value="{{ request.path }}" />
-          <input type="submit" class="btn btn-primary" value="Add Agent" />
+          <input type="submit" class="btn btn-primary btn-block" value="Add" />
         </form>
       </div>
     </div>
 
-    <div>
-      <button>Add New Account</button>
-      <div id="create_agent_div" style="display: none">
+    <div class="hidden_div">
+      <button class="untoggle_button btn btn-secondary btn-block">Add New Account</button>
+      <div class='toggle_div' style="display: none">
         <form id="create_account_form" action="{% url 'create_account' %}" method="POST">
           {% csrf_token %} {{ account_form|crispy }}
           <input type="hidden" name="next" value="{{ request.path }}" />
-          <input type="submit" class="btn btn-primary" value="Add Account" />
+          <input type="submit" class="btn btn-primary btn-block" value="Add Account" />
         </form>
       </div>
     </div>
