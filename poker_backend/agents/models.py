@@ -62,7 +62,7 @@ class Deal(models.Model):
 
 class Account(models.Model):
     nickname = models.CharField(max_length=64)
-    club_account_id = models.IntegerField()
+    club_account_id = models.IntegerField(unique=True)
     agent_players = models.ManyToManyField(
         AgentPlayer, related_name="accounts", blank=True)
     clubs = models.ManyToManyField(

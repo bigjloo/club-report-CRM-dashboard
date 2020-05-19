@@ -5,8 +5,9 @@ from accounting_engine.models import Report
 from .serializers import ReportSerializer
 import json
 import csv
+from django.core.exceptions import ValidationError
 
-
+"""
 def calculate_account_rakeback(rakeback_percent, rake):
     account_rakeback = round((rakeback_percent * rake), 2)
     return account_rakeback
@@ -22,24 +23,15 @@ def calculate_agent_rakeback(agent_rakeback_percent, rake, account_rakeback):
     agent_rakeback = round(
         ((agent_rakeback_percent * rake) - account_rakeback), 2)
     return agent_rakeback
+"""
 
 
-def csvfile_to_json(file):
-    json_data = []
-    rows = []
-    for row in file:
-        cleaned_row = row.decode('UTF-8').rstrip('\r\n')
-        rows.append(cleaned_row)
-    headers = rows.pop(0).split(',')
-    number_of_columns = len(headers)
-    number_of_rows = len(rows)
-    for i in range(number_of_rows):
-        record = {}
-        current_row = rows[i].split(',')
-        for j in range(number_of_columns):
-            record[headers[j]] = current_row[j]
-        json_data.append(record)
-    process_report(json_data)
+def validate_agent_player(agent_player_id):
+    try:
+        agent_player = AgentPlayer.objects.get(code=agent_player_id)
+    except AgentPlayer.DoesNotExist:
+        raise Http404("Agent does not exist")
+    return agent_player
 
 
 def get_report(start_date, end_date, user):
@@ -55,7 +47,27 @@ def get_report(start_date, end_date, user):
     return reports
 
 
+def csvfile_to_json(file):
+    json_data = []
+    rows = []
+    # convert bytes to strings
+    for row in file:
+        cleaned_row = row.decode('UTF-8').rstrip('\r\n')
+        rows.append(cleaned_row)
+    headers = rows.pop(0).split(',')
+    number_of_columns = len(headers)
+    number_of_rows = len(rows)
+    for i in range(number_of_rows):
+        record = {}
+        current_row = rows[i].split(',')
+        for j in range(number_of_columns):
+            record[headers[j]] = current_row[j]
+        json_data.append(record)
+    process_report(json_data)
+
+
 def process_report(json_data):
+    reports = []
     for row in json_data:
         try:
             agent_player_id = row.pop('agent_player')
@@ -82,10 +94,14 @@ def process_report(json_data):
             report.agent_player = agent_player
             report.account = account
             report.club = club
-            report.save()
+            # eport.save()
+            reports.append(report)
         else:
             print(serializer.errors)
             raise Http404("serializer not valid")
+
+    for r in reports:
+        r.save()
 
 
 def generate_report(data, agent_id):

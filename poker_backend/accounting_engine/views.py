@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Report
 from django.contrib.auth.models import User
 from decimal import Decimal
@@ -24,7 +24,7 @@ class UploadFileView(View):
         # if not csvfile.endswith('.csv'):
         #    return Http404("File not csv type")
         csvfile_to_json(csvfile)
-        return HttpResponseRedirect(reverse('index'), status=201)
+        return redirect('reports')
 
 
 class ReportView(View):
