@@ -12,7 +12,7 @@ class AgentPlayer(models.Model):
         (0, 'Player'),
     )
     nickname = models.CharField(max_length=64)
-    code = models.CharField(max_length=12)
+    code = models.CharField(max_length=12, unique=True)
     #rakeback = models.DecimalField(max_digits=3, decimal_places=3)
     agent = models.IntegerField(choices=options, default=0)
     user = models.ForeignKey(
@@ -32,7 +32,7 @@ class Club(models.Model):
     )
     name = models.CharField(max_length=64)
     code = models.CharField(max_length=3)
-    club_id = models.IntegerField()
+    club_id = models.IntegerField(unique=True)
     chip_value = models.DecimalField(max_digits=3, decimal_places=2, validators=[
                                      MinValueValidator(Decimal('0.01'))])
     platform = models.CharField(max_length=3, choices=PLATFORMS, default='PB')
@@ -52,6 +52,9 @@ class Deal(models.Model):
         max_digits=3, decimal_places=3, validators=[MinValueValidator(Decimal('0.01'))])
     chip_value = models.DecimalField(max_digits=3, decimal_places=2, validators=[
                                      MinValueValidator(Decimal('0.01'))])
+
+    class Meta:
+        unique_together = ('agent_player', 'club')
 
     def __str__(self):
         return f"{self.agent_player.nickname} ({self.agent_player.code}) is in {self.club.name} with RB = ({self.rakeback_percentage}), 1 chip = {self.chip_value}"
