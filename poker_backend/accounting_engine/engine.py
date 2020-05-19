@@ -24,7 +24,7 @@ def calculate_agent_rakeback(agent_rakeback_percent, rake, account_rakeback):
     return agent_rakeback
 
 
-def csvsfile_to_json(file):
+def csvfile_to_json(file):
     json_data = []
     rows = []
     for row in file:

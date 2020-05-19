@@ -45,37 +45,41 @@ h3 {
   <p class='display-4'>Welcome {{ user.username}}</p>
 </div>
 
-<div>
-  <h3>Clubs</h3>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Platform</th>
-        <th>Name</th>
-        <th>Code</th>
-        <th>Club ID</th>
-        <th>MYR</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for club in clubs %}
-      <tr>
-        <td>{{ club.platform}}</td>
-        <td>{{ club.name }}</td>
-        <td>{{ club.code }}</td>
-        <td>{{ club.club_id }}</td>
-        <td>{{ club.chip_value }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
+<div class="card">
+  <div class="card-header">
+    <h5>Clubs</h5>
+  </div>
+  <div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Platform</th>
+          <th>Name</th>
+          <th>Code</th>
+          <th>Club ID</th>
+          <th>MYR</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for club in clubs %}
+        <tr>
+          <td>{{ club.platform}}</td>
+          <td>{{ club.name }}</td>
+          <td>{{ club.code }}</td>
+          <td>{{ club.club_id }}</td>
+          <td>{{ club.chip_value }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
 
-    </tr>
-  </table>
+      </tr>
+    </table>
+  </div>
 </div>
 
 <div class='row'>
   <div class='col-md-6'>
-    <div>
+    <div class="card">
       <h3>Agent Players</h3>
       <ul>
         {% for agent in user.agent_players.all %}
@@ -104,6 +108,7 @@ h3 {
     </div>
   </div>
   <div class='col-md-6'>
+    <div class='card'>
     <h3>Action</h3>
     <div class="hidden_div">
       <button class="untoggle_button btn btn-secondary btn-block">Upload Report</button>
@@ -136,6 +141,7 @@ h3 {
           <input type="submit" class="btn btn-primary btn-block" value="Add Account" />
         </form>
       </div>
+    </div>
     </div>
   </div>
 </div>

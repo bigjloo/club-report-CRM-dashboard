@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from decimal import Decimal
 from django.http import Http404, HttpResponseRedirect, HttpResponse, JsonResponse
 from django.urls import reverse
-from .engine import generate_report, get_report, csvsfile_to_json, process_report
+from .engine import generate_report, get_report, csvfile_to_json, process_report
 from agents.models import Account, AgentPlayer, Club
 from .serializers import ReportSerializer
 from rest_framework.parsers import JSONParser, FormParser, FileUploadParser
