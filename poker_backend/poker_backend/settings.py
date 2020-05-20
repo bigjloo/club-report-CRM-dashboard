@@ -127,6 +127,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'agents.apps.AgentsConfig',
     'accounting_engine.apps.AccountingEngineConfig',
+    'notes.apps.NotesConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
