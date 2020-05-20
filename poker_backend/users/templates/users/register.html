@@ -1,32 +1,129 @@
 {% extends "users/base.html" %} {% load crispy_forms_tags %}{% block title %}
-Registration page {%endblock%} {% block body %} {% if message %} {{ message }}
-{% endif %}
-<div>
-  <h3>Register</h3>
-  {% if message %} {{ message }}{% endif %}
-  <form action="{% url 'register' %}" method="POST">
-    {% csrf_token %}
-    <input
-      type="text"
-      name="username"
-      placeholder="Choose a username"
-      autocomplete="None"
-    />
-    <input type="email" name="email" placeholder="Email" />
-    <input type="password" name="password" placeholder="Password" />
-    <input
-      type="password"
-      name="password_confirmation"
-      placeholder="Repeat Password"
-    />
-    <input type="submit" value="Register" />
-  </form>
-</div>
+Registration page {%endblock%} {% block script %}
+<style type="text/css">
+  .form-control {
+    height: 40px;
+    box-shadow: none;
+    color: #969fa4;
+  }
 
-<div>
-  <form action="{% url 'register' %}" method="POST">
+  .form-control:focus {
+    border-color: #5cb85c;
+  }
+
+  .form-control,
+  .btn {
+    border-radius: 3px;
+  }
+
+  .signup-form {
+    width: 340px;
+    margin: 50px auto;
+    padding: 30px 0;
+  }
+
+  .signup-form h2 {
+    color: #636363;
+    margin: 0 0 15px;
+    position: relative;
+    text-align: center;
+  }
+
+  .signup-form h2:before,
+  .signup-form h2:after {
+    content: "";
+    height: 2px;
+    width: 30%;
+    background: #d4d4d4;
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+  }
+
+  .signup-form h2:before {
+    left: 0;
+  }
+
+  .signup-form h2:after {
+    margin: 0 0 15px;
+  }
+
+  .signup-form .hint-text {
+    color: #999;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .signup-form form {
+    margin-bottom: 15px;
+    background: #f7f7f7;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    padding: 30px;
+  }
+
+  .signup-form .form-group {
+    margin-bottom: 20px;
+  }
+
+  .signup-form input[type="checkbox"] {
+    margin-top: 3px;
+  }
+
+  .signup-form .btn {
+    font-size: 16px;
+    font-weight: bold;
+    min-width: 140px;
+    outline: none !important;
+  }
+
+  .signup-form .row div:first-child {
+    padding-right: 10px;
+  }
+
+  .signup-form .row div:last-child {
+    padding-left: 10px;
+  }
+
+  .signup-form a {
+    text-decoration: underline;
+  }
+
+  .signup-form a:hover {
+    text-decoration: none;
+  }
+
+  .signup-form form a {
+    color: #5cb85c;
+    text-decoration: none;
+  }
+
+  .signup-form form a:hover {
+    text-decoration: underline;
+  }
+</style>
+{% endblock %} {% block body %} {% if message %} {{ message }} {% endif %}
+
+<div class="signup-form">
+  <form action="{% url 'register' %}" method="post">
+    <h2>Register</h2>
+    <p class="hint-text">
+      Create your account. It's free and only takes a minute.
+    </p>
     {% csrf_token %} {{ form|crispy}}
-    <input type="submit" value="Register" />
+    <div class="form-group">
+      <label class="checkbox-inline"
+        ><input type="checkbox" required="required" /> I accept the
+        <a href="#">Terms of Use</a> &amp; <a href="#">Privacy Policy</a></label
+      >
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary btn-lg btn-block">
+        Register Now
+      </button>
+    </div>
   </form>
+  <div class="text-center">
+    Already have an account? <a href="/">Sign in</a>
+  </div>
 </div>
 {% endblock %}

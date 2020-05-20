@@ -2,13 +2,24 @@
 <html>
   <head>
     {% load bootstrap4 %} {% bootstrap_css %} {%bootstrap_javascript jquery%}
-
     <title>{% block title %} {% endblock %}</title>
-    {% block script %} {% endblock %} {% block style%} {% endblock%}
+    {% block script %}
+    <script>
+      /*
+      $(document).ready(function () {
+        alert("Hi");
+        document.querySelector("#add_agent_player_nav").onclick = function () {
+          alert("hi");
+        };
+      });
+      */
+    </script>
+    {% endblock %} {% block style%} {% endblock%}
   </head>
   <body>
     {%load crispy_forms_tags %}
     <div class="container">
+      {% if request.user.is_authenticated %}
       <nav class="navbar navbar-expand-md navbar-light bg-light">
         <a href="{% url 'index' %}" class="navbar-brand">PokerPA</a>
         <button
@@ -26,6 +37,7 @@
               >Home</a
             >
             <a
+              id="add_agent_player_nav"
               href="#"
               class="nav-item nav-link"
               data-toggle="modal"
@@ -46,11 +58,11 @@
               data-target="#upload_file_modal"
               >Upload Report</a
             >
-            <a
-              href="{% url 'reports'%}"
-              class="nav-item nav-link disabled"
-              tabindex="-1"
+            <a href="{% url 'reports'%}" class="nav-item nav-link disabled"
               >Reports</a
+            >
+            <a href="{% url 'accounts'%}" class="nav-item nav-link disabled"
+              >Accounts</a
             >
           </div>
           <div class="navbar-nav ml-auto">
@@ -62,6 +74,7 @@
           </div>
         </div>
       </nav>
+      {% endif %}
 
       <!-- Modal -->
       <div id="agent_player_modal" class="modal fade" role="dialog">
@@ -76,7 +89,7 @@
             </div>
             <div class="modal-body">
               <form
-                id="create_agent_form"
+                id="agent_form"
                 action="{% url 'create_agent' %}"
                 method="POST"
               >
@@ -150,7 +163,7 @@
             </div>
             <div class="modal-body">
               <form
-                id="create_account_form"
+                id="account_form"
                 action="{% url 'create_account' %}"
                 method="POST"
               >

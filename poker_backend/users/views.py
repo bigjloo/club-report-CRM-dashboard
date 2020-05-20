@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect, Http404
+from django.contrib.auth.forms import UserCreationForm
+from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.contrib.auth.models import User
 from django.urls import reverse
 from agents.models import Club, AgentPlayer
@@ -9,17 +10,6 @@ from rest_framework import generics
 #from .serializers import UserSerializer
 
 # Create your views here.
-
-"""
-class UserList(generics.ListAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-
-class UserDetail(generics.RetrieveAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-"""
 
 
 def index(request):
@@ -30,6 +20,8 @@ def index(request):
     agent_player_form = AgentPlayerForm()
     account_form = AccountForm(user)
     upload_form = UploadFileForm()
+    #agent_player = AgentPlayer.objects.first()
+    #account_club_form = AccountClubForm(agent_player)
     #account_club_form = AccountClubForm()
     context = {
         "user": user,
@@ -40,6 +32,15 @@ def index(request):
         # 'account_club_form': account_club_form,
     }
     return render(request, "users/user.html", context)
+
+
+def get_account_club_form(request, agent_id):
+    try:
+        agent_player = AgentPlayer.objects.get(pk=agent_id)
+    except Agent.DoesNotExist:
+        return Http404("Agent Does Not Exist")
+    account_club_form = AccountClubForm(agent_player)
+    return HttpResponse("get club form")
 
 
 def login_view(request):
@@ -58,6 +59,22 @@ def logout_view(request):
     return render(request, 'users/login.html', {"message": "Logged out"})
 
 
+def register(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('index')
+    else:
+        form = UserCreationForm()
+    return render(request, 'users/register.html', {'form': form})
+
+
+"""
 def register(request):
     if request.method == "POST":
         # create user
@@ -81,3 +98,8 @@ def register(request):
     }
 
     return render(request, 'users/register.html', context)
+"""
+
+
+def guide(request):
+    return render(request, 'users/guide.html')

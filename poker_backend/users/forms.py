@@ -44,7 +44,26 @@ class AccountClubForm(ModelForm):
         fields = [
             'rakeback_percentage',
             'chip_value',
+            'account',
+            'club',
         ]
+
+
+class NewAccountClubForm(ModelForm):
+
+    class Meta:
+        model = AccountClub
+        fields = [
+            'rakeback_percentage',
+            'chip_value',
+            'account',
+            'club',
+        ]
+
+    def __init__(self, user, *args, **kwargs):
+        super(AccountClubForm, self).__init__(*args, **kwargs)
+        self.fields['account'].queryset = Account.objects.filter(
+            agent_players=agent_player)
 
 
 class UploadFileForm(forms.Form):

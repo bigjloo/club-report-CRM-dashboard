@@ -20,12 +20,18 @@ Reports {% endblock %} {% block script %}
     });
   });
 </script>
-{%endblock%} {% block body %}
+{%endblock%} {% block style %}
+<style>
+  #report_form {
+    width: 400px;
+  }
+</style>
+{% endblock %} {% block body %}
 <h3>Reports</h3>
 <div>
   <form id="report_form" action="{% url 'reports' %}" method="POST">
     {% csrf_token %} {{ form|crispy }}
-    <input type="submit" />
+    <input type="submit" class="btn btn-primary btn-block" value="Get Report" />
   </form>
 </div>
 <hr />

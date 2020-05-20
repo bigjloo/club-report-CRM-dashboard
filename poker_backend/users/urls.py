@@ -9,6 +9,7 @@ urlpatterns = [
     path('', include('agents.urls')),
     path('create_account/', include('agents.urls')),
     path('', include('accounting_engine.urls')),
+    path('guide/', views.guide, name='guide'),
 ]
 
 #path('upload_report', include('accounting_engine.urls')),
