@@ -19,6 +19,7 @@
   <body>
     {%load crispy_forms_tags %}
     <div class="container">
+      {% if request.user.is_authenticated %}
       <nav class="navbar navbar-expand-md navbar-light bg-light">
         <a href="{% url 'index' %}" class="navbar-brand">PokerPA</a>
         <button
@@ -60,6 +61,9 @@
             <a href="{% url 'reports'%}" class="nav-item nav-link disabled"
               >Reports</a
             >
+            <a href="{% url 'accounts'%}" class="nav-item nav-link disabled"
+              >Accounts</a
+            >
           </div>
           <div class="navbar-nav ml-auto">
             {% if request.user.is_authenticated %}
@@ -70,6 +74,7 @@
           </div>
         </div>
       </nav>
+      {% endif %}
 
       <!-- Modal -->
       <div id="agent_player_modal" class="modal fade" role="dialog">

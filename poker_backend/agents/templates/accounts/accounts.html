@@ -1,10 +1,31 @@
 {% extends "users/base.html" %} {% block title %} Accounts {% endblock %} {%load
-crispy_forms_tags %} {%block script%} {%endblock%} {%block style%} {%endblock%}
-{%block body%}
+crispy_forms_tags %} {%block script%}
+<script></script>
+{%endblock%} {%block style%} {%endblock%} {%block body%}
 <div>
   <h3>Accounts</h3>
 </div>
 <div>
-  {% for agent_player in agent_players %} {{ agent_player}} {% endfor %}
+  <ul>
+    {% for agent_player in agent_players %}
+    <li>
+      <h5>{{ agent_player}}</h5>
+      <ul>
+        {% for account in agent_player.accounts.all %}
+        <li class="account_name">{{account}}</li>
+        <div class="account_clubs" style="display: block;">
+          <ul>
+            {% for account_club in account.club_deal.all %}
+            <li>
+              {{account_club.club}} | RB:{{ account_club.rakeback_percentage }}
+            </li>
+            {% endfor%}
+          </ul>
+        </div>
+        {%endfor%}
+      </ul>
+    </li>
+    {%endfor%}
+  </ul>
 </div>
 {% endblock %}
