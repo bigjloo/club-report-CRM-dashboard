@@ -2,39 +2,79 @@
 {%block script%} 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll('.hidden_div').forEach((div) => {
-    div.querySelector('.untoggle_button').onclick = () => {
-      const accounts = div.querySelector('.toggle_div')
-      if (accounts.style.display === 'none') {
-        accounts.style.display = "block";
-      }else{
-        accounts.style.display = "none";
-      }
+  document.querySelectorAll(".account_name").forEach((account) => {
+    account.onclick = function() {
+      const account_id = this.parentElement.id;
+      $("#edit_account_modal").modal(); 
+    }
+  
+  })
+
+  document.querySelectorAll(".delete").forEach((del_button) => {
+    del_button.onclick = () => {
+      alert("delete");
+
+      const account_id = del_button.parentElement.parentElement.id;
+      alert(account_id);
+
+      const delete_account_form = document.querySelector("#delete_account_form");
+      delete_account_form.action = `account/${account_id}`;
+
+      const edit_account_form = document.querySelector("#edit_account_form");
+      edit_account_form.action = `account/${account_id}`;
     }
   })
 
-
+  document.querySelectorAll(".edit").forEach((edit_button) => {
+    edit_button.onclick = () => {
+      alert("edit");
+      const account_id = edit_button.parentElement.parentElement.id;
+      alert(account_id);
+      const account_form = document.querySelector("#account_form");
+      account_form.method = "PUT"
+      account_form.action = `account/${account_id}`
+      const modal_title = document.querySelector("#account_modal").querySelector(".modal-title")
+      const submit_button =  account_form.querySelector('input[type="submit"]')
+      modal_title.innerHTML = "Edit Account"
+      submit_button.value = "Edit Account"
+    }
+  })
+  
+  
+  /*
+  $("#account_modal").on("submit", "#create_account_form", function(e){
+    e.preventDefault();
+    const form = $(this);
+    $.ajax({
+      url: form.attr('data-url'),
+      data: form.serialize(),
+      type: form.attr('method'),
+      dataType: 'json',
+      success: function(data){
+        if (data.form_is_valid){
+          console.log("success create account")
+        }
+      }
+    })
+  })
+  */
 })
 
 
 </script>
+
+
 {%endblock%} 
 
 {% block style %}
 <style>
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
+
+.table-wrapper {
+  padding: 5px;
+  margin: 5px;
 }
 
-.hidden_div {
-  padding: 2px;
-}
 
-h3 {
-  text-align: center;
-}
 
 </style>
 {% endblock %}
@@ -79,103 +119,19 @@ h3 {
   </div>
 </div>
 
-<div class='row'>
-  <!-- agent players -->
-  <div class='col-md-6'>
-    <div class="card">
-      <div class="card-header">
-        <h3>Agent Players</h3>
-      </div>
-      <div class="card-body">
-        <ul>
-          {% for agent in user.agent_players.all %}
-          <li>
-            <div class="hidden_div">
-              <button class="untoggle_button btn btn-outline-info btn-block">{{ agent }} 
-                <form action="{% url 'agent_player_detail' agent.id %}" method="DELETE">
-                  {% csrf_token %}
-                  <button type="submit" class="close">&times;</button>
-                </form>
-              </button>
-              <div class='toggle_div' style="display: none">
-                <strong>Accounts</strong>
-                <ul>
-                  {% for account in agent.accounts.all %}
-                  <li>{{ account }} <button type="button" class="close">
-                    <a href="{% url 'agent_destroy' agent %">&times;</a>
-                  </button></li>
-                  {% endfor %}
-                </ul>
-              </div>
-            </div>
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <!-- action -->
-  <div class='col-md-6'>
-    <div class='card'>
-    <div class="card-header">
-      <h3>Action</h3>
-    </div>
-    <div class="card-body">
-      <div class="hidden_div">
-        <button class="untoggle_button btn btn-secondary btn-block">Upload Report</button>
-        <div class='toggle_div' style="display: none">
-          <form id="file_upload_form" action="{% url 'upload_file' %}" method="POST" enctype="multipart/form-data" >
-            {% csrf_token %}
-            {{upload_form|crispy}}
-            <input type="submit" class="btn btn-primary" value="Upload">
-          </form>
-        </div>
-      </div>
-
-      <div class="hidden_div">
-        <button class="untoggle_button btn btn-secondary btn-block">Add New Agent/Player</button>
-        <div class='toggle_div' style="display: none">
-          <form id="create_agent_form" action="{% url 'create_agent' %}" method="POST">
-            {% csrf_token %} {{ agent_form|crispy }}
-            <input type="hidden" name="next" value="{{ request.path }}" />
-            <input type="submit" class="btn btn-primary btn-block" value="Add" />
-          </form>
-        </div>
-      </div>
-
-      <div class="hidden_div">
-        <button class="untoggle_button btn btn-secondary btn-block">Add New Account</button>
-        <div class='toggle_div' style="display: none">
-          <form id="create_account_form" action="{% url 'create_account' %}" method="POST">
-            {% csrf_token %} {{ account_form|crispy }}
-            <input type="hidden" name="next" value="{{ request.path }}" />
-            <input type="submit" class="btn btn-primary btn-block" value="Add Account" />
-          </form>
-        </div>
-      </div>
-    </div>
-    </div>
-  </div>
-</div>
 
 <!-- crud bootstrap dashboard-->
+{% for agent in user.agent_players.all %}
 <div class="table-wrapper">
   <!-- table header-->
   <div class="table-title">
     <div class="row">
-      <div class="col-sm-3">
-        <h2>Accounts</h2>
+      <div class="col-xl-6">
+        <h5>{{agent}}</h5>
       </div>
-      <div class="col-sm-3">
-        <select id="agent_player_select" >
-          {% for agent in user.agent_players.all %}
-          <option value="{{agent.id}}">{{ agent }}</option>
-          {% endfor %}
-        </select>
-      </div>
+    
       <!-- action //add delete modal for account-->
-      <div class="col-sm-6 text">
+      <div class="col-xl-6 text-right">
         <a href="#account_modal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i>
           <span>Add Accounts</span></a>
         <a href="#delete_account_modal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i>
@@ -202,213 +158,68 @@ h3 {
       </tr>
     </thead>
     <tbody>
-      
-      <tr>
-        <!-- checkbox //agent_pk-->
-        <td>
-          <span class="custom-checkbox">
-            <input type="checkbox" id="agent_pk" name="options[]" value="1">
-            <label for="agent_pk"></label>
-          </span>
-        </td>
-        <td>account_name</td>
-        <td>account_id</td>
-        <td>status</td>
-        <td>notes</td>
-        <!-- edit/delete account modal-->
-        <td>
-          <a href="#edit_account_modal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
-              title="Edit">&#xE254;</i></a>
-          <a href="#delete_account_modal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
-              title="Delete">&#xE872;</i></a>
-        </td>
-      </tr>
-
-      <!-- rows -->
-      <tr>
-        <td>
-          <span class="custom-checkbox">
-            <input type="checkbox" id="checkbox1" name="options[]" value="1">
-            <label for="checkbox1"></label>
-          </span>
-        </td>
-        <td>Thomas Hardy</td>
-        <td>thomashardy@mail.com</td>
-        <td>89 Chiaroscuro Rd, Portland, USA</td>
-        <td>(171) 555-2222</td>
-        <td>
-          <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
-              title="Edit">&#xE254;</i></a>
-          <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons"
-              data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-        </td>
-      </tr>
-      <!-- another row -->
-      <tr>
-        <td>
-          <span class="custom-checkbox">
-            <input type="checkbox" id="checkbox2" name="options[]" value="1">
-            <label for="checkbox2"></label>
-          </span>
-        </td>
-        <td>Dominique Perrier</td>
-        <td>dominiqueperrier@mail.com</td>
-        <td>Obere Str. 57, Berlin, Germany</td>
-        <td>(313) 555-5735</td>
-        <td>
-          <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
-              title="Edit">&#xE254;</i></a>
-          <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons"
-              data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <span class="custom-checkbox">
-            <input type="checkbox" id="checkbox3" name="options[]" value="1">
-            <label for="checkbox3"></label>
-          </span>
-        </td>
-        <td>Maria Anders</td>
-        <td>mariaanders@mail.com</td>
-        <td>25, rue Lauriston, Paris, France</td>
-        <td>(503) 555-9931</td>
-        <td>
-          <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
-              title="Edit">&#xE254;</i></a>
-          <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons"
-              data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <span class="custom-checkbox">
-            <input type="checkbox" id="checkbox4" name="options[]" value="1">
-            <label for="checkbox4"></label>
-          </span>
-        </td>
-        <td>Fran Wilson</td>
-        <td>franwilson@mail.com</td>
-        <td>C/ Araquil, 67, Madrid, Spain</td>
-        <td>(204) 619-5731</td>
-        <td>
-          <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
-              title="Edit">&#xE254;</i></a>
-          <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons"
-              data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <span class="custom-checkbox">
-            <input type="checkbox" id="checkbox5" name="options[]" value="1">
-            <label for="checkbox5"></label>
-          </span>
-        </td>
-        <td>Martin Blank</td>
-        <td>martinblank@mail.com</td>
-        <td>Via Monte Bianco 34, Turin, Italy</td>
-        <td>(480) 631-2097</td>
-        <td>
-          <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
-              title="Edit">&#xE254;</i></a>
-          <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons"
-              data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-        </td>
-      </tr>
+  
+        {% for account in agent.accounts.all %}
+        <tr id="{{account.id}}">
+          <!-- checkbox //agent_pk-->
+          
+          
+            <td>
+              <span class="custom-checkbox">
+                <input type="checkbox" id="checkbox_{{account.id}}" name="options[]" value="1">
+                <label for="checkbox_{{account.id}}"></label>
+              </span>
+            </td>
+            <td class="account_name">{{account.nickname}}</td>
+            <td>{{account.club_account_id}}</td>
+            <td><span class="badge badge-success">active</span></td>
+            <td>notes</td>
+            <!-- edit/delete account modal-->
+            <td>
+              <a href="#account_modal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
+                  title="Edit">&#xE254;</i></a>
+              <a href="#delete_account_modal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
+                  title="Delete">&#xE872;</i></a>
+            </td>
+          
+          
+        </tr>
+        {% endfor %}
     </tbody>
   </table>
-  <div class="clearfix">
-    <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-    <ul class="pagination">
-      <li class="page-item disabled"><a href="#">Previous</a></li>
-      <li class="page-item"><a href="#" class="page-link">1</a></li>
-      <li class="page-item"><a href="#" class="page-link">2</a></li>
-      <li class="page-item active"><a href="#" class="page-link">3</a></li>
-      <li class="page-item"><a href="#" class="page-link">4</a></li>
-      <li class="page-item"><a href="#" class="page-link">5</a></li>
-      <li class="page-item"><a href="#" class="page-link">Next</a></li>
-    </ul>
-  </div>
 </div>
-</div>
-<!-- Edit Modal HTML -->
-<div id="addEmployeeModal" class="modal fade">
+{% endfor %}
+
+<!-- Edit Modal HTML 
+<div id="edit_account_modal" class="modal fade">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form>
+      
         <div class="modal-header">
-          <h4 class="modal-title">Add Employee</h4>
+          <h4 class="modal-title">Edit Account</h4>
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         </div>
         <div class="modal-body">
-          <div class="form-group">
-            <label>Name</label>
-            <input type="text" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label>Email</label>
-            <input type="email" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label>Address</label>
-            <textarea class="form-control" required></textarea>
-          </div>
-          <div class="form-group">
-            <label>Phone</label>
-            <input type="text" class="form-control" required>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-          <input type="submit" class="btn btn-success" value="Add">
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-<!-- Edit Modal HTML -->
-<div id="editEmployeeModal" class="modal fade">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form>
-        <div class="modal-header">
-          <h4 class="modal-title">Edit Employee</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        </div>
-        <div class="modal-body">
-          <div class="form-group">
-            <label>Name</label>
-            <input type="text" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label>Email</label>
-            <input type="email" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label>Address</label>
-            <textarea class="form-control" required></textarea>
-          </div>
-          <div class="form-group">
-            <label>Phone</label>
-            <input type="text" class="form-control" required>
-          </div>
+          <form id="edit_account_form" action="/" method="PUT">
+            {% csrf_token %} {{ account_form|crispy }}
+          </form>
         </div>
         <div class="modal-footer">
           <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
           <input type="submit" class="btn btn-info" value="Save">
         </div>
-      </form>
+      
     </div>
   </div>
 </div>
+-->
 <!-- Delete Modal HTML -->
-<div id="deleteEmployeeModal" class="modal fade">
+<div id="delete_account_modal" class="modal fade">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form>
+      <form id="delete_account_form" action="/" method="DELETE">
         <div class="modal-header">
-          <h4 class="modal-title">Delete Employee</h4>
+          <h4 class="modal-title">Delete Account</h4>
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         </div>
         <div class="modal-body">
@@ -416,10 +227,12 @@ h3 {
           <p class="text-warning"><small>This action cannot be undone.</small></p>
         </div>
         <div class="modal-footer">
+          <input id="delete_account_id" name="pk" type="hidden" value="">
           <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
           <input type="submit" class="btn btn-danger" value="Delete">
         </div>
       </form>
     </div>
   </div>
+</div>
 {% endblock %}

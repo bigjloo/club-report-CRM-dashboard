@@ -1,0 +1,10 @@
+{% extends "users/base.html" %} {% block title %} Accounts {% endblock %} {%load
+crispy_forms_tags %} {%block script%} {%endblock%} {%block style%} {%endblock%}
+{%block body%}
+<div>
+  <h3>Accounts</h3>
+</div>
+<div>
+  {% for agent_player in agent_players %} {{ agent_player}} {% endfor %}
+</div>
+{% endblock %}

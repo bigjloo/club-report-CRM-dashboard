@@ -7,7 +7,9 @@ urlpatterns = [
     path('agent_player/<int:pk>/', views.AgentPlayerDetail.as_view(),
          name="agent_player_detail"),
     path('create_account', views.create_account, name="create_account"),
-
+    path('api/accounts/', views.AccountList.as_view(), name='api_accounts'),
+    path('accounts/', views.accounts, name='accounts'),
+    path('account/<int:pk>', views.AccountDetail.as_view(), name="account_detail"),
 
 ]
 
