@@ -13,6 +13,7 @@ from rest_framework.views import APIView
 from .permissions import isOwnerOrReadOnly
 from users.forms import AccountForm
 from django.urls import reverse
+from users.forms import AccountClubForm
 
 #
 # from django.contrib.auth.models import User
@@ -119,8 +120,10 @@ def accounts(request):
     if request.method == 'GET':
         user = request.user
         agent_players = AgentPlayer.objects.filter(user=user)
+        form = AccountClubForm()
         context = {
             'agent_players': agent_players,
+            'form': form,
         }
 
         return render(request, 'accounts/accounts.html', context)
@@ -154,4 +157,17 @@ def create_account(request):
             serializer.save()
             next = request.POST.get('next', '/')
             return redirect('index')
+        return JsonResponse(serializer.errors, status=400)
+
+
+""" add club """
+
+
+def add_club(request):
+    if request.method == 'POST':
+        data = FormParser().parse(request)
+        serializer = AccountClubSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return HttpResponseRedirect(reverse('accounts'))
         return JsonResponse(serializer.errors, status=400)
