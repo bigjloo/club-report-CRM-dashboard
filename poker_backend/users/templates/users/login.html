@@ -24,8 +24,11 @@
     font-weight: bold;
   }
 </style>
-{%endblock%} {%block body %}
-
+{%endblock%} {%block body %} {% if message %}
+<div class="alert alert-danger fade show">
+  <p>{{ message }}</p>
+</div>
+{% endif %}
 <div class="login-form">
   <form action="{% url 'login' %}" method="post">
     {% csrf_token %}
