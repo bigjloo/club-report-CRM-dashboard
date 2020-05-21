@@ -104,6 +104,47 @@ def process_report(json_data):
         r.save()
 
 
+def calculate_user_total_earnings(reports, user):
+    user_total_earnings = Decimal(0)
+    user_club_deal = {}
+    club_statement = {}
+    for club_deal in user.club_deals.all():
+        user_club_deal[club_deal.club_id] = {
+            'rakeback': club_deal.rakeback_percentage, 'chip_value': club_deal.chip_value}
+        club_statement[club_deal.club.name] = Decimal(0)
+    agent_player_statement = {}
+    for agent_player, reports in reports.items():
+        agent_player_statement[agent_player] = Decimal(0)
+        for report in reports:
+            print(report.account)
+            account_total_rakeback = (report.total_rake *
+                                      user_club_deal[report.club.id]['rakeback'] *
+                                      user_club_deal[report.club.id]['chip_value'])
+            print(f"account total rakeback = {account_total_rakeback}")
+            account_rakeback_out = (report.rakeback *
+                                    report.account.club_deal.first().chip_value)
+            print(f"account rakeback out = {account_rakeback_out}")
+            earnings = account_total_rakeback - account_rakeback_out
+            print(f"user earnings = {earnings}")
+            user_total_earnings += earnings
+            agent_player_statement[agent_player] += report.net_winloss_fiat
+            print(
+                f"agent_player_statement {agent_player}= {agent_player_statement[agent_player]}")
+            club_statement[report.club.name] += ((report.gross_winloss + (report.total_rake * user_club_deal[report.club.id]['rakeback']))
+                                                 * user_club_deal[report.club.id]['chip_value'])
+            print(
+                f"club statement {report.club.name} = {club_statement[report.club.name]}")
+    print(user_total_earnings)
+    print(agent_player_statement)
+    print(club_statement)
+    return user_total_earnings
+
+
+def prepare_statement(reports, user):
+    TODO
+
+
+"""
 def generate_report(data, agent_id):
     agent = Agent.objects.get(club_agent_id=agent_id)
     agent_gross_winloss = 0
@@ -177,3 +218,4 @@ def generate_report(data, agent_id):
     except:
         raise Http404("error creating agent report")
     agent_report.save()
+"""

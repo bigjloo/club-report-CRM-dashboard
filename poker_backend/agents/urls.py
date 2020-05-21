@@ -10,10 +10,11 @@ urlpatterns = [
     path('api/accounts/', views.AccountList.as_view(), name='api_accounts'),
     path('accounts/', views.accounts, name='accounts'),
     path('account/<int:pk>', views.AccountDetail.as_view(), name="account_detail"),
-    path('add_club/', views.add_club, name="add_club"),
+    path('add_account_club/', views.add_account_club, name="add_account_club"),
     path('account_clubs/<int:account_id>', views.get_clubs, name="get_clubs"),
     path('edit_account/<int:account_id>',
          views.edit_account, name="edit_account"),
+    path('add_club', views.add_club, name="add_club"),
 
 ]
 

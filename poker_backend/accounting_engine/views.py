@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from decimal import Decimal
 from django.http import Http404, HttpResponseRedirect, HttpResponse, JsonResponse
 from django.urls import reverse
-from .engine import generate_report, get_report, csvfile_to_json, process_report
+from .engine import get_report, csvfile_to_json, process_report, calculate_user_total_earnings
 from agents.models import Account, AgentPlayer, Club
 from .serializers import ReportSerializer
 from rest_framework.parsers import JSONParser, FormParser, FileUploadParser
@@ -35,6 +35,8 @@ class ReportView(View):
             start_date = form.cleaned_data['start_date']
             end_date = form.cleaned_data['end_date']
             reports = get_report(start_date, end_date, user)
+            user_earnings = round(
+                calculate_user_total_earnings(reports, user), 2)
             agent_player_form = AgentPlayerForm()
             account_form = AccountForm(user)
             upload_form = UploadFileForm()
@@ -44,6 +46,7 @@ class ReportView(View):
                 "agent_form": agent_player_form,
                 "account_form": account_form,
                 'upload_form': upload_form,
+                'user_earnings': user_earnings,
             }
 
             return render(request, 'reports/reports.html', context)

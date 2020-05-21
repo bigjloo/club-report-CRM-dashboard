@@ -161,10 +161,10 @@ def create_account(request):
         return JsonResponse(serializer.errors, status=400)
 
 
-""" add club """
+""" add account club """
 
 
-def add_club(request):
+def add_account_club(request):
     if request.method == 'POST':
         data = FormParser().parse(request)
         serializer = AccountClubSerializer(data=data)
@@ -198,3 +198,7 @@ def edit_account(request, account_id):
         account.agent_player = agent_player
         account.save()
         return redirect('index')
+
+
+def add_club(request):
+    TODO

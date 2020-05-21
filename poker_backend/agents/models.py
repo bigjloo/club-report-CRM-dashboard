@@ -33,19 +33,19 @@ class Club(models.Model):
     name = models.CharField(max_length=64)
     code = models.CharField(max_length=3)
     club_id = models.IntegerField(unique=True)
-    chip_value = models.DecimalField(max_digits=3, decimal_places=2, validators=[
-                                     MinValueValidator(Decimal('0.01'))])
+    # chip_value = models.DecimalField(max_digits=3, decimal_places=2, validators=[
+    #                                 MinValueValidator(Decimal('0.01'))])
     platform = models.CharField(max_length=3, choices=PLATFORMS, default='PB')
-    agent_players = models.ManyToManyField(
-        AgentPlayer, through='Deal', related_name='clubs')
+    users = models.ManyToManyField(
+        User, through='Deal', related_name='clubs')
 
     def __str__(self):
         return f"{self.name} ({self.code}) - {self.club_id}"
 
 
 class Deal(models.Model):
-    agent_player = models.ForeignKey(
-        AgentPlayer, on_delete=models.SET_NULL, null=True, related_name='deals')
+    user = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, related_name='club_deals')
     club = models.ForeignKey(
         Club, on_delete=models.SET_NULL, null=True, related_name='agent_deals')
     rakeback_percentage = models.DecimalField(
@@ -54,10 +54,10 @@ class Deal(models.Model):
                                      MinValueValidator(Decimal('0.01'))])
 
     class Meta:
-        unique_together = ('agent_player', 'club')
+        unique_together = ('user', 'club')
 
     def __str__(self):
-        return f"{self.agent_player.nickname} ({self.agent_player.code}) is in {self.club.name} with RB = ({self.rakeback_percentage}), 1 chip = {self.chip_value}"
+        return f"{self.club.name} | RB = ({self.rakeback_percentage}) | 1  = {self.chip_value}"
 
 
 class Account(models.Model):

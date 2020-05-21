@@ -1,5 +1,5 @@
 from django.forms import ModelForm, modelform_factory, ChoiceField, CharField
-from agents.models import AgentPlayer, Account, AccountClub
+from agents.models import AgentPlayer, Account, AccountClub, Deal
 from django.contrib.auth.models import User
 from django import forms
 #from crispy_forms.helper import FormHelper
@@ -95,3 +95,14 @@ class EditAccountForm(ModelForm):
         super(EditAccountForm, self).__init__(*args, **kwargs)
         self.fields['agent_players'].queryset = AgentPlayer.objects.filter(
             user=user)
+
+
+class AddClubForm(ModelForm):
+
+    class Meta:
+        model = Deal
+        exclude = ['user']
+
+    def __init__(self, *args, **kwargs):
+        super(AddClubForm, self).__init__(*args, **kwargs)
+        self.fields['rakeback_percentage'].help_text = "Use decimals only. example: 50%, write 0.5"

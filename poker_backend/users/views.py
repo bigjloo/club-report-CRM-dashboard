@@ -5,9 +5,9 @@ from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.contrib.auth.models import User
 from django.urls import reverse
 from agents.models import Club, AgentPlayer
-from .forms import AgentPlayerForm, AccountForm, AccountClubForm, UserForm, UploadFileForm, EditAccountForm
+from .forms import AgentPlayerForm, AccountForm, AccountClubForm, UserForm, UploadFileForm, EditAccountForm, AddClubForm
 from rest_framework import generics
-#from .serializers import UserSerializer
+
 
 # Create your views here.
 
@@ -22,6 +22,7 @@ def index(request):
     upload_form = UploadFileForm()
     account_club_form = AccountClubForm()
     edit_account_form = EditAccountForm(user)
+    add_club_form = AddClubForm()
     context = {
         "user": user,
         "clubs": clubs,
@@ -30,6 +31,7 @@ def index(request):
         'upload_form': upload_form,
         'account_club_form': account_club_form,
         'edit_account_form': edit_account_form,
+        'add_club_form': add_club_form,
     }
     return render(request, "users/user.html", context)
 
