@@ -83,4 +83,4 @@ class AccountClub(models.Model):
                                      MinValueValidator(Decimal('0.01'))])
 
     def __str__(self):
-        return f"{self.account.nickname} belongs to {self.club.name} with rakeback of {self.rakeback_percentage} and chip value of {self.chip_value}"
+        return f"{self.account.nickname} | {self.club.name} | {round(self.rakeback_percentage * 100, 1)}% | {self.chip_value}"
