@@ -3,6 +3,7 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
+  //add account_clubs for account 
   document.querySelectorAll(".account_name").forEach((account) => {
     account.onclick = function() {
       const account_id = this.parentElement.id;
@@ -30,6 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
   })
 
+  //add account_id to delete_account_form
   document.querySelectorAll(".delete").forEach((del_button) => {
     del_button.onclick = () => {
       const account_id = del_button.parentElement.parentElement.id;
@@ -38,24 +40,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   })
 
+  //add account_id to edit_account_form
   document.querySelectorAll(".edit").forEach((edit_button) => {
     edit_button.onclick = () => {
-      /*
-      const account_id = edit_button.parentElement.parentElement.id;
-      const account_form = document.querySelector("#account_form");
-      account_form.method = "POST"
-      account_form.action = `account/${account_id}`
-      const modal_title = document.querySelector("#account_modal").querySelector(".modal-title")
-      const submit_button =  account_form.querySelector('input[type="submit"]')
-      modal_title.innerHTML = "Edit Account"
-      submit_button.value = "Edit Account"
-      */
       const account_id = edit_button.parentElement.parentElement.id;
       const edit_account_form = document.querySelector('#edit_account_modal').querySelector("form")
       edit_account_form.action = `edit_account/${account_id}`
     }
   })
-  
+
+  // retrieve notes 
   document.querySelectorAll('.notes').forEach((note) => {
     note.onclick = () => {
       const agent_id = note.dataset.id;
@@ -85,14 +79,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   })
 
-  document.querySelector("#notes_modal").querySelector("form").onsubmit = function(){
-    
-  }
   
   /////////////////////////////////
 
   
-  // Activate tooltip
+  // Activate tooltip for css
   $('[data-toggle="tooltip"]').tooltip();
 
   // Select/Deselect checkboxes
@@ -113,24 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
       $("#selectAll").prop("checked", false);
     }
   });
-  
-  /*
-  $("#account_modal").on("submit", "#create_account_form", function(e){
-    e.preventDefault();
-    const form = $(this);
-    $.ajax({
-      url: form.attr('data-url'),
-      data: form.serialize(),
-      type: form.attr('method'),
-      dataType: 'json',
-      success: function(data){
-        if (data.form_is_valid){
-          console.log("success create account")
-        }
-      }
-    })
-  })
-  */
+ 
 })
 
 
@@ -471,9 +445,6 @@ document.addEventListener("DOMContentLoaded", () => {
   
         {% for account in agent.accounts.all %}
         <tr id="{{account.id}}">
-          <!-- checkbox //agent_pk-->
-          
-          
             <td>
               <span class="custom-checkbox">
                 <input type="checkbox" id="checkbox_{{account.id}}" name="options[]" value="1">
@@ -486,10 +457,6 @@ document.addEventListener("DOMContentLoaded", () => {
             <td>notes</td>
             <!-- edit/delete account modal-->
             <td>
-              <!-- add_club_icon
-              <a href="#" class="add_club" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
-                  title="Edit">&#xE147;</i></a>
-              -->
                   <a href="#edit_account_modal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
                   title="Edit">&#xE254;</i></a>
               <a href="#delete_account_modal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
@@ -503,184 +470,4 @@ document.addEventListener("DOMContentLoaded", () => {
   </table>
 </div>
 {% endfor %}
-
-<!-- Edit Modal HTML 
-<div id="edit_account_modal" class="modal fade">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      
-        <div class="modal-header">
-          <h4 class="modal-title">Edit Account</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        </div>
-        <div class="modal-body">
-          <form id="edit_account_form" action="/" method="PUT">
-            {% csrf_token %} {{ account_form|crispy }}
-          </form>
-        </div>
-        <div class="modal-footer">
-          <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-          <input type="submit" class="btn btn-info" value="Save">
-        </div>
-      
-    </div>
-  </div>
-</div>
--->
-<!-- Delete Modal HTML -->
-<div id="delete_account_modal" class="modal fade">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form id="delete_account_form" action="/" method="DELETE">
-        <div class="modal-header">
-          <h4 class="modal-title">Delete Account</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        </div>
-        <div class="modal-body">
-          <p>Are you sure you want to delete these Records?</p>
-          <p class="text-warning"><small>This action cannot be undone.</small></p>
-        </div>
-        <div class="modal-footer">
-          <input id="delete_account_id" name="pk" type="hidden" value="">
-          <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-          <input type="submit" class="btn btn-danger" value="Delete">
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<div id="notes_modal" class="modal fade">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form>
-        <div class="modal-header">
-          <h4 class="modal-title">Notes</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        </div>
-        <form action="/" method="POST">
-          {% csrf_token %}
-        <div class="modal-body">
-          <div class="container">
-              
-              <div class="form-group">
-                <textarea id="modal_note_text" class="form-control" cols="35" name="note" >Notes</textarea>
-              </div>
-              
-          </div>
-        </div>
-        <div class="modal-footer">
-          <input type="button" class="btn btn-default" data-dismiss="modal" value="Close">
-          <input type="submit" class="btn btn-danger" value="Save">
-        </div>
-        </form>
-    </div>
-  </div>
-</div>
-
-<div id="individual_account_modal" class="modal fade">
-  <div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title">Clubs</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        </div>
-        <div class="modal-body">
-            <div class="container">
-              <div id="account_clubs_div">
-              </div>
-              <form method="POST" action="{% url 'add_account_club' %}">
-                {% csrf_token %}{{account_club_form|crispy}}
-                <input type="submit" value="Add Club" class="btn btn-primary btn-block">
-              </form>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">
-              Close
-            </button>
-        </div>
-    </div>
-  </div>
-</div>
-
-<div id="edit_account_modal" class="modal fade">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Edit Account</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div class="container">
-          <div id="account_clubs_div">
-          </div>
-          <form method="POST" action="/">
-            {% csrf_token %}{{edit_account_form|crispy}}
-            <input type="submit" value="Edit Account" class="btn btn-primary btn-block">
-          </form>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">
-          Close
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="add_club_modal" class="modal fade">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Add Club</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div class="container">
-          <div id="account_clubs_div">
-          </div>
-          <form method="POST" action="{% url 'deals' %}">
-            {% csrf_token %}{{add_club_form|crispy}}
-            <input type="submit" value="Add Club" class="btn btn-primary btn-block">
-          </form>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">
-          Close
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- add club to account 
-<div id="account_club_modal" class="modal fade">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Add New Club</h4>
-        <button type="button" class="close" data-dismiss="modal">
-          &times;
-        </button>
-      </div>
-      <div class="modal-body">
-        <form id="account_form" action="/" method="POST">
-          {% csrf_token %} {{ account_club_form|crispy }}
-          <input type="hidden" name="next" value="{{ request.path }}" />
-          <input type="submit" class="btn btn-primary btn-block" value="Add Club" />
-        </form>
-      </div>
-    
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">
-          Close
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
--->
-
 {% endblock %}

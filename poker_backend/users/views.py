@@ -20,7 +20,7 @@ def index(request):
     agent_player_form = AgentPlayerForm()
     account_form = AccountForm(user)
     upload_form = UploadFileForm()
-    account_club_form = AccountClubForm()
+    account_club_form = AccountClubForm(user)
     edit_account_form = EditAccountForm(user)
     add_club_form = AddClubForm()
     context = {

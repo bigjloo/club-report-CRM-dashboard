@@ -1,9 +1,9 @@
 from django.forms import ModelForm, modelform_factory, ChoiceField, CharField
-from agents.models import AgentPlayer, Account, AccountClub, Deal
+from agents.models import AgentPlayer, Account, AccountClub, Deal, Club
 from django.contrib.auth.models import User
 from django import forms
-#from crispy_forms.helper import FormHelper
-#from crispy_forms.layout import Submit
+# from crispy_forms.helper import FormHelper
+# from crispy_forms.layout import Submit
 
 
 class AgentPlayerForm(ModelForm):
@@ -33,8 +33,7 @@ class AccountForm(ModelForm):
         super(AccountForm, self).__init__(*args, **kwargs)
         self.fields['agent_players'].queryset = AgentPlayer.objects.filter(
             user=user)
-        #self.fields['player'].queryset = Player.objects.filter(user=user)
-        #self.fields['agent'].widgets = ChoiceField()
+        self.fields['clubs'].queryset = Club.objects.filter(users=user)
 
 
 class AccountClubForm(ModelForm):
@@ -48,7 +47,14 @@ class AccountClubForm(ModelForm):
             'club',
         ]
 
+    def __init__(self, user, *args, **kwargs):
+        super(AccountClubForm, self).__init__(*args, **kwargs)
+        self.fields['account'].queryset = Account.objects.filter(
+            agent_players__in=user.agent_players.all())
+        self.fields['club'].queryset = Club.objects.filter(users=user)
 
+
+"""
 class NewAccountClubForm(ModelForm):
 
     class Meta:
@@ -64,6 +70,8 @@ class NewAccountClubForm(ModelForm):
         super(AccountClubForm, self).__init__(*args, **kwargs)
         self.fields['account'].queryset = Account.objects.filter(
             agent_players=agent_player)
+        self.fields['club'].queryset = Club.objects.filter(users=user)
+"""
 
 
 class UploadFileForm(forms.Form):

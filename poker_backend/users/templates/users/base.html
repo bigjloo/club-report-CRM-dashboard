@@ -5,14 +5,7 @@
     <title>{% block title %} {% endblock %}</title>
     {% block script %}
     <script>
-      /*
-      $(document).ready(function () {
-        alert("Hi");
-        document.querySelector("#add_agent_player_nav").onclick = function () {
-          alert("hi");
-        };
-      });
-      */
+     
     </script>
     {% endblock %} {% block style%} {% endblock%}
     <style>
@@ -24,6 +17,7 @@
   <body>
     {%load crispy_forms_tags %}
     <div class="container">
+      <!-- navigation bar-->
       {% if request.user.is_authenticated %}
       <nav class="navbar navbar-expand-md navbar-light bg-light">
         <a href="{% url 'index' %}" class="navbar-brand">PokerPA</a>
@@ -77,10 +71,9 @@
       </nav>
       {% endif %}
 
-      <!-- Modal -->
+      <!-- add agent player  -->
       <div id="agent_player_modal" class="modal fade" role="dialog">
         <div class="modal-dialog">
-          <!-- Modal content-->
           <div class="modal-content">
             <div class="modal-header">
               <h4 class="modal-title">Add Agent/Player</h4>
@@ -117,9 +110,9 @@
         </div>
       </div>
 
+      <!-- upload file -->
       <div id="upload_file_modal" class="modal fade" role="dialog">
         <div class="modal-dialog">
-          <!-- Modal content-->
           <div class="modal-content">
             <div class="modal-header">
               <h4 class="modal-title">Upload File</h4>
@@ -151,10 +144,9 @@
           </div>
         </div>
       </div>
-
+      <!-- account form ? -->
       <div id="account_modal" class="modal fade" role="dialog">
         <div class="modal-dialog">
-          <!-- Modal content-->
           <div class="modal-content">
             <div class="modal-header">
               <h4 class="modal-title">Add New Account</h4>
@@ -184,6 +176,137 @@
                 class="btn btn-default"
                 data-dismiss="modal"
               >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delete Modal HTML -->
+      <div id="delete_account_modal" class="modal fade">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <form id="delete_account_form" action="/" method="DELETE">
+              <div class="modal-header">
+                <h4 class="modal-title">Delete Account</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              </div>
+              <div class="modal-body">
+                <p>Are you sure you want to delete these Records?</p>
+                <p class="text-warning"><small>This action cannot be undone.</small></p>
+              </div>
+              <div class="modal-footer">
+                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                <input type="submit" class="btn btn-danger" value="Delete">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- notes -->
+      <div id="notes_modal" class="modal fade">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <form>
+              <div class="modal-header">
+                <h4 class="modal-title">Notes</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              </div>
+              <form action="/" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                  <div class="container">
+      
+                    <div class="form-group">
+                      <textarea id="modal_note_text" class="form-control" cols="35" name="note">Notes</textarea>
+                    </div>
+      
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <input type="button" class="btn btn-default" data-dismiss="modal" value="Close">
+                  <input type="submit" class="btn btn-danger" value="Save">
+                </div>
+              </form>
+          </div>
+        </div>
+      </div>
+      
+      <!-- add account club for account s-->
+      <div id="individual_account_modal" class="modal fade">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Add Club Deal</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+                <div id="account_clubs_div">
+                </div>
+                <form method="POST" action="{% url 'add_account_club' %}">
+                  {% csrf_token %}{{account_club_form|crispy}}
+                  <input type="submit" value="Add Club" class="btn btn-primary btn-block">
+                </form>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- edit account  form -->
+      <div id="edit_account_modal" class="modal fade">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Edit Account</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+                <div id="account_clubs_div">
+                </div>
+                <form method="POST" action="/">
+                  {% csrf_token %}{{edit_account_form|crispy}}
+                  <input type="submit" value="Edit Account" class="btn btn-primary btn-block">
+                </form>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- add club for user -->
+      <div id="add_club_modal" class="modal fade">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Add Club</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+                <div id="account_clubs_div">
+                </div>
+                <form method="POST" action="{% url 'deals' %}">
+                  {% csrf_token %}{{add_club_form|crispy}}
+                  <input type="submit" value="Add Club" class="btn btn-primary btn-block">
+                </form>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">
                 Close
               </button>
             </div>

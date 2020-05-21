@@ -13,7 +13,6 @@ class AgentPlayerSerializer(serializers.ModelSerializer):
 
 class ClubSerializer(serializers.ModelSerializer):
 
-    agent_players = AgentPlayerSerializer(many=True)
 
     class Meta:
         model = Club

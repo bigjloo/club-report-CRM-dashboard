@@ -109,7 +109,7 @@ class AccountDetail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
-        account = self.get_object(pk)
+        account = self.get_object(pk=pk)
         account.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
