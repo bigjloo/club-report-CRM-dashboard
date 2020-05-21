@@ -2,10 +2,31 @@
 {%block script%} 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+
   document.querySelectorAll(".account_name").forEach((account) => {
     account.onclick = function() {
       const account_id = this.parentElement.id;
-      $("#account_modal").modal(); 
+      const clubs_div = document.querySelector("#account_clubs_div");
+      clubs_div.innerHTML = "";
+      const request = new XMLHttpRequest;
+      request.open("GET", `account_clubs/${account_id}`);
+      
+      request.onload = () => {
+        const data = JSON.parse(request.responseText);
+        if (request.status == 200){
+          const clubs_div = document.querySelector("#account_clubs_div");
+          for (var i = 0; i < data.length; i++){
+            const p = document.createElement("p");
+            p.innerHTML = data[i];
+            clubs_div.append(p);
+          }
+        } else {
+          alert("failed");
+          console.log(data.errors);
+        }
+      }
+      request.send()
+       
     }
   
   })
@@ -456,7 +477,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <label for="checkbox_{{account.id}}"></label>
               </span>
             </td>
-            <td class="account_name">{{account.nickname}}</td>
+            <td class="account_name"><a href="#individual_account_modal" data-toggle="modal">{{account.nickname}}</a></td>
             <td>{{account.club_account_id}}</td>
             <td><span class="badge badge-success">active</span></td>
             <td>notes</td>
@@ -551,9 +572,33 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
         </form>
     </div>
-
   </div>
+</div>
 
+<div id="individual_account_modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Clubs</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="container">
+              <div id="account_clubs_div">
+              </div>
+              <form method="POST" action="{% url 'add_club' %}">
+                {% csrf_token %}{{account_club_form|crispy}}
+                <input type="submit" value="Add Club" class="btn btn-primary btn-block">
+              </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+              Close
+            </button>
+        </div>
+    </div>
+  </div>
 </div>
 
 <!-- add club to account 

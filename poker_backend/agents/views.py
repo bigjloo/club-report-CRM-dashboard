@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .create import createAgent
 # from rest_framework import viewsets, permissions
 from .serializers import AgentPlayerSerializer, CreateAccountSerializer, AccountClubSerializer, AccountSerializer
-from django.http import JsonResponse, HttpResponseRedirect, Http404
+from django.http import JsonResponse, HttpResponseRedirect, Http404, HttpResponse
 from rest_framework.parsers import FormParser
 from agents.models import AccountClub, AgentPlayer, Club, Account
 from django.contrib.auth.models import User
@@ -14,6 +14,7 @@ from .permissions import isOwnerOrReadOnly
 from users.forms import AccountForm
 from django.urls import reverse
 from users.forms import AccountClubForm
+from django.core import serializers
 
 #
 # from django.contrib.auth.models import User
@@ -171,3 +172,15 @@ def add_club(request):
             serializer.save()
             return HttpResponseRedirect(reverse('accounts'))
         return JsonResponse(serializer.errors, status=400)
+
+
+def get_clubs(request, account_id):
+    try:
+        account = Account.objects.get(pk=account_id)
+    except Account.DoesNotExist:
+        return Http404("Account does not exist")
+    clubs = account.club_deal.all()
+    json_array = []
+    for club in clubs:
+        json_array.append(club.__str__())
+    return JsonResponse(json_array, safe=False)

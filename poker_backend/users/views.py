@@ -22,14 +22,14 @@ def index(request):
     upload_form = UploadFileForm()
     #agent_player = AgentPlayer.objects.first()
     #account_club_form = AccountClubForm(agent_player)
-    #account_club_form = AccountClubForm()
+    account_club_form = AccountClubForm()
     context = {
         "user": user,
         "clubs": clubs,
         "agent_form": agent_player_form,
         "account_form": account_form,
         'upload_form': upload_form,
-        # 'account_club_form': account_club_form,
+        'account_club_form': account_club_form,
     }
     return render(request, "users/user.html", context)
 
