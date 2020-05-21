@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework import status, permissions, generics
 from rest_framework.views import APIView
 from .permissions import isOwnerOrReadOnly
-from users.forms import AccountForm
+from users.forms import AccountForm, EditAccountForm
 from django.urls import reverse
 from users.forms import AccountClubForm
 from django.core import serializers
@@ -184,3 +184,17 @@ def get_clubs(request, account_id):
     for club in clubs:
         json_array.append(club.__str__())
     return JsonResponse(json_array, safe=False)
+
+
+def edit_account(request, account_id):
+    account = Account.objects.get(pk=account_id)
+
+    if request.method == "POST":
+        data = FormParser().parse(request)
+        print(data)
+        agent_player = AgentPlayer.objects.get(pk=data['agent_players'])
+        account.nickname = data['nickname']
+        account.club_account_id = data['club_account_id']
+        account.agent_player = agent_player
+        account.save()
+        return redirect('index')

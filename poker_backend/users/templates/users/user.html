@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
       clubs_div.innerHTML = "";
       const request = new XMLHttpRequest;
       request.open("GET", `account_clubs/${account_id}`);
-      
       request.onload = () => {
         const data = JSON.parse(request.responseText);
         if (request.status == 200){
@@ -33,31 +32,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelectorAll(".delete").forEach((del_button) => {
     del_button.onclick = () => {
-      alert("delete");
-
       const account_id = del_button.parentElement.parentElement.id;
-      alert(account_id);
-
       const delete_account_form = document.querySelector("#delete_account_form");
       delete_account_form.action = `account/${account_id}`;
-
-      const edit_account_form = document.querySelector("#edit_account_form");
-      edit_account_form.action = `account/${account_id}`;
     }
   })
 
   document.querySelectorAll(".edit").forEach((edit_button) => {
     edit_button.onclick = () => {
-      alert("edit");
+      /*
       const account_id = edit_button.parentElement.parentElement.id;
-      alert(account_id);
       const account_form = document.querySelector("#account_form");
-      account_form.method = "PUT"
+      account_form.method = "POST"
       account_form.action = `account/${account_id}`
       const modal_title = document.querySelector("#account_modal").querySelector(".modal-title")
       const submit_button =  account_form.querySelector('input[type="submit"]')
       modal_title.innerHTML = "Edit Account"
       submit_button.value = "Edit Account"
+      */
+      const account_id = edit_button.parentElement.parentElement.id;
+      const edit_account_form = document.querySelector('#edit_account_modal').querySelector("form")
+      edit_account_form.action = `edit_account/${account_id}`
     }
   })
   
@@ -487,7 +482,7 @@ document.addEventListener("DOMContentLoaded", () => {
               <a href="#" class="add_club" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
                   title="Edit">&#xE147;</i></a>
               -->
-                  <a href="#account_modal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
+                  <a href="#edit_account_modal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
                   title="Edit">&#xE254;</i></a>
               <a href="#delete_account_modal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
                   title="Delete">&#xE872;</i></a>
@@ -601,6 +596,31 @@ document.addEventListener("DOMContentLoaded", () => {
   </div>
 </div>
 
+<div id="edit_account_modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Account</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div id="account_clubs_div">
+          </div>
+          <form method="POST" action="/">
+            {% csrf_token %}{{edit_account_form|crispy}}
+            <input type="submit" value="Edit Account" class="btn btn-primary btn-block">
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- add club to account 
 <div id="account_club_modal" class="modal fade">
   <div class="modal-dialog">

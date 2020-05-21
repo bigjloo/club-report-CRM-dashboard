@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.contrib.auth.models import User
 from django.urls import reverse
 from agents.models import Club, AgentPlayer
-from .forms import AgentPlayerForm, AccountForm, AccountClubForm, UserForm, UploadFileForm
+from .forms import AgentPlayerForm, AccountForm, AccountClubForm, UserForm, UploadFileForm, EditAccountForm
 from rest_framework import generics
 #from .serializers import UserSerializer
 
@@ -20,9 +20,8 @@ def index(request):
     agent_player_form = AgentPlayerForm()
     account_form = AccountForm(user)
     upload_form = UploadFileForm()
-    #agent_player = AgentPlayer.objects.first()
-    #account_club_form = AccountClubForm(agent_player)
     account_club_form = AccountClubForm()
+    edit_account_form = EditAccountForm(user)
     context = {
         "user": user,
         "clubs": clubs,
@@ -30,6 +29,7 @@ def index(request):
         "account_form": account_form,
         'upload_form': upload_form,
         'account_club_form': account_club_form,
+        'edit_account_form': edit_account_form,
     }
     return render(request, "users/user.html", context)
 

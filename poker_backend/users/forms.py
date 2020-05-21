@@ -68,8 +68,7 @@ class NewAccountClubForm(ModelForm):
 
 class UploadFileForm(forms.Form):
 
-    file = forms.FileField(label="Upload Report",
-                           help_text="Upload report")
+    file = forms.FileField(label="Only CSV files")
 
 
 class UserForm(ModelForm):
@@ -85,3 +84,14 @@ class UserForm(ModelForm):
             'password2',
             'email',
         ]
+
+
+class EditAccountForm(ModelForm):
+    class Meta:
+        model = Account
+        exclude = ['clubs']
+
+    def __init__(self, user, *args, **kwargs):
+        super(EditAccountForm, self).__init__(*args, **kwargs)
+        self.fields['agent_players'].queryset = AgentPlayer.objects.filter(
+            user=user)
