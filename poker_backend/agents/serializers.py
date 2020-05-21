@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from agents.models import AgentPlayer, Account, Club, AccountClub
+from agents.models import AgentPlayer, Account, Club, AccountClub, Deal
 
 # this serializer inherits from Agent class
 
@@ -76,3 +76,10 @@ class AccountClubSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountClub
         fields = '__all__'
+
+
+class DealSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Deal
+        exclude = ['user']

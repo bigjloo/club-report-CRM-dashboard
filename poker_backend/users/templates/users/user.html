@@ -404,6 +404,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <thead>
         <tr>
           <th>Club ID</th>
+          <th>Referral ID</th>
           <th>Club Name</th>
           <th>Rakeback</th>
           <th>MYR</th>
@@ -413,6 +414,7 @@ document.addEventListener("DOMContentLoaded", () => {
         {% for club_deal in user.club_deals.all %}
         <tr>
           <td>{{ club_deal.club.club_id }}</td>
+          <td>{{ club_deal.referral_id }}</td>
           <td>{{ club_deal.club.name}}</td>
           <td>{{ club_deal.rakeback_percentage }}</td>
           <td>{{ club_deal.chip_value }}</td>
@@ -639,7 +641,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="container">
           <div id="account_clubs_div">
           </div>
-          <form method="POST" action="{% url 'add_club' %}">
+          <form method="POST" action="{% url 'deals' %}">
             {% csrf_token %}{{add_club_form|crispy}}
             <input type="submit" value="Add Club" class="btn btn-primary btn-block">
           </form>

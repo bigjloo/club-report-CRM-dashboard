@@ -52,6 +52,7 @@ class Deal(models.Model):
         max_digits=3, decimal_places=3, validators=[MinValueValidator(Decimal('0.01'))])
     chip_value = models.DecimalField(max_digits=3, decimal_places=2, validators=[
                                      MinValueValidator(Decimal('0.01'))])
+    referral_id = models.IntegerField(blank=True, null=True)
 
     class Meta:
         unique_together = ('user', 'club')

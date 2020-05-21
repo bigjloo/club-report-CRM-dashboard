@@ -1,17 +1,17 @@
 from django.shortcuts import render, redirect
 from .create import createAgent
 # from rest_framework import viewsets, permissions
-from .serializers import AgentPlayerSerializer, CreateAccountSerializer, AccountClubSerializer, AccountSerializer
+from .serializers import AgentPlayerSerializer, CreateAccountSerializer, AccountClubSerializer, AccountSerializer, DealSerializer
 from django.http import JsonResponse, HttpResponseRedirect, Http404, HttpResponse
 from rest_framework.parsers import FormParser
-from agents.models import AccountClub, AgentPlayer, Club, Account
+from agents.models import AccountClub, AgentPlayer, Club, Account, Deal
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status, permissions, generics
 from rest_framework.views import APIView
 from .permissions import isOwnerOrReadOnly
-from users.forms import AccountForm, EditAccountForm
+from users.forms import AccountForm, EditAccountForm, DealForm
 from django.urls import reverse
 from users.forms import AccountClubForm
 from django.core import serializers
@@ -200,5 +200,28 @@ def edit_account(request, account_id):
         return redirect('index')
 
 
+"""
 def add_club(request):
-    TODO
+    if request.method == "POST":
+        serializer = DealSerializer(data=request.POST)
+        if serializer.is_valid():
+            serializer.user =
+            serializer.save()
+        else:
+            print(serializer.errors)
+        return redirect('index')
+"""
+
+
+class DealList(generics.ListCreateAPIView):
+    queryset = Deal.objects.all()
+    serializer_class = DealSerializer
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly,
+        isOwnerOrReadOnly,
+    ]
+    # add permission class here
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        serializer.save(user=user)

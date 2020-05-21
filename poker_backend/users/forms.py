@@ -106,3 +106,10 @@ class AddClubForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(AddClubForm, self).__init__(*args, **kwargs)
         self.fields['rakeback_percentage'].help_text = "Use decimals only. example: 50%, write 0.5"
+
+
+class DealForm(ModelForm):
+
+    class Meta:
+        model = Deal
+        fields = "__all__"
