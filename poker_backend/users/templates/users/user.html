@@ -43,22 +43,24 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll('.notes').forEach((note) => {
     note.onclick = () => {
       const agent_id = note.dataset.id;
+      const modal_txt = document.querySelector("#modal_note_text");
+      modal_txt.innerHTML = "Enter Notes Here";
+      const note_form = document.querySelector("#notes_modal").querySelector('form')
+      note_form.action = `notes/${agent_id}`
+      note_form.method = "POST"
       const request = new XMLHttpRequest;
       //const csrftoken = Cookies.get('csrftoken');
-      request.open("POST", "{% url 'get_notes' %}");
+      request.open("GET", `get_notes/${agent_id}`);
       request.onload = () => {
-        alert(request.responseText)
         const data = JSON.parse(request.responseText);
         if (request.status == 200) {
           const note = data[0].fields['note'];
-          alert(note)
-          document.querySelector("#modal_note_text").innerHTML = note
-
+          modal_txt.innerHTML = note
+          
         } else {
           alert("data load fail");
           console.log(data.errors)
         };
-        
       } 
       const data = new FormData();
       data.append("agent_id", agent_id);
@@ -66,6 +68,10 @@ document.addEventListener("DOMContentLoaded", () => {
       request.send(data);
     }
   })
+
+  document.querySelector("#notes_modal").querySelector("form").onsubmit = function(){
+    
+  }
   
   /////////////////////////////////
 
@@ -528,14 +534,22 @@ document.addEventListener("DOMContentLoaded", () => {
           <h4 class="modal-title">Notes</h4>
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         </div>
+        <form action="/" method="POST">
+          {% csrf_token %}
         <div class="modal-body">
-          <p id="modal_note_text">Notes</p>
+          <div class="container">
+              
+              <div class="form-group">
+                <textarea id="modal_note_text" class="form-control" cols="35" name="note" >Notes</textarea>
+              </div>
+              
+          </div>
         </div>
         <div class="modal-footer">
           <input type="button" class="btn btn-default" data-dismiss="modal" value="Close">
           <input type="submit" class="btn btn-danger" value="Save">
         </div>
-      </form>
+        </form>
     </div>
 
   </div>
