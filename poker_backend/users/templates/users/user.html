@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".account_name").forEach((account) => {
     account.onclick = function() {
       const account_id = this.parentElement.id;
-      $("#edit_account_modal").modal(); 
+      $("#account_modal").modal(); 
     }
   
   })
@@ -39,6 +39,42 @@ document.addEventListener("DOMContentLoaded", () => {
       submit_button.value = "Edit Account"
     }
   })
+  
+  document.querySelectorAll('.notes').forEach((note) => {
+    note.onclick = () => {
+      const agent_id = note.dataset.id;
+      const modal_txt = document.querySelector("#modal_note_text");
+      modal_txt.innerHTML = "Enter Notes Here";
+      const note_form = document.querySelector("#notes_modal").querySelector('form')
+      note_form.action = `notes/${agent_id}`
+      note_form.method = "POST"
+      const request = new XMLHttpRequest;
+      //const csrftoken = Cookies.get('csrftoken');
+      request.open("GET", `get_notes/${agent_id}`);
+      request.onload = () => {
+        const data = JSON.parse(request.responseText);
+        if (request.status == 200) {
+          const note = data[0].fields['note'];
+          modal_txt.innerHTML = note
+          
+        } else {
+          alert("data load fail");
+          console.log(data.errors)
+        };
+      } 
+      const data = new FormData();
+      data.append("agent_id", agent_id);
+      //data.append("csrfmiddlewaretoken", csrftoken);
+      request.send(data);
+    }
+  })
+
+  document.querySelector("#notes_modal").querySelector("form").onsubmit = function(){
+    
+  }
+  
+  /////////////////////////////////
+
   
   // Activate tooltip
   $('[data-toggle="tooltip"]').tooltip();
@@ -89,7 +125,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
 {% block style %}
 <style>
+.account_name{
+  transition: font-size 0.7s, font-weight 0.2s;
+  cursor: pointer;
+}
 
+.account_name:hover{
+  font-size: 120%;
+  font-weight: bold;
+}
 
 #annoucement {
   margin: 10px auto;
@@ -367,7 +411,8 @@ document.addEventListener("DOMContentLoaded", () => {
   <div class="table-title">
     <div class="row">
       <div class="col-xl-6">
-        <h3>{{agent}}</h3>
+        <h3>{{agent}} <a href="#notes_modal" data-toggle="modal" ><span class="badge badge-info notes" data-id="{{agent.id}}">notes</span></a></h3> 
+
       </div>
     
       <!-- action //add delete modal for account-->
@@ -479,6 +524,36 @@ document.addEventListener("DOMContentLoaded", () => {
       </form>
     </div>
   </div>
+</div>
+
+<div id="notes_modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form>
+        <div class="modal-header">
+          <h4 class="modal-title">Notes</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        </div>
+        <form action="/" method="POST">
+          {% csrf_token %}
+        <div class="modal-body">
+          <div class="container">
+              
+              <div class="form-group">
+                <textarea id="modal_note_text" class="form-control" cols="35" name="note" >Notes</textarea>
+              </div>
+              
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input type="button" class="btn btn-default" data-dismiss="modal" value="Close">
+          <input type="submit" class="btn btn-danger" value="Save">
+        </div>
+        </form>
+    </div>
+
+  </div>
+
 </div>
 
 <!-- add club to account 

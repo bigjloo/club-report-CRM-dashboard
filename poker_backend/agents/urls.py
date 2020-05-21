@@ -10,6 +10,7 @@ urlpatterns = [
     path('api/accounts/', views.AccountList.as_view(), name='api_accounts'),
     path('accounts/', views.accounts, name='accounts'),
     path('account/<int:pk>', views.AccountDetail.as_view(), name="account_detail"),
+    path('add_club/', views.add_club, name="add_club")
 
 ]
 

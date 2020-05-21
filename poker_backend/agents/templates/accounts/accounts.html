@@ -1,7 +1,15 @@
-{% extends "users/base.html" %} {% block title %} Accounts {% endblock %} {%load
-crispy_forms_tags %} {%block script%}
-<script></script>
+{% extends "users/base.html" %} {% block title %} Accounts {% endblock %} {%load crispy_forms_tags %} {%block script%}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".add_club").forEach((add) => {
+      add.onclick = function(){ 
+               
+      }
+    });
+  });
+</script>
 {%endblock%} {%block style%} {%endblock%} {%block body%}
+
 <div>
   <h3>Accounts</h3>
 </div>
@@ -12,7 +20,9 @@ crispy_forms_tags %} {%block script%}
       <h5>{{ agent_player}}</h5>
       <ul>
         {% for account in agent_player.accounts.all %}
-        <li class="account_name">{{account}}</li>
+        <li ">
+          {{account}} <a href="#account_club_modal" data-toggle="modal"><span class="badge badge-secondary add_club" data-id="{{account.pk}}">add club</span></a>
+        </li>
         <div class="account_clubs" style="display: block;">
           <ul>
             {% for account_club in account.club_deal.all %}
@@ -28,4 +38,31 @@ crispy_forms_tags %} {%block script%}
     {%endfor%}
   </ul>
 </div>
+
+<div id="account_club_modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Add Club</h4>
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="{% url 'add_club' %}">
+          {% csrf_token %}{{form|crispy}}
+          <input type="submit" value="Add Club" class="btn btn-primary btn-block">
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}
