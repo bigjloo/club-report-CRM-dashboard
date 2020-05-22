@@ -26,7 +26,7 @@ SECRET_KEY = '+2$ztl$3%l13k2x1-skeksm#ica!ndo1a@j1clv+c5x#gnk6n&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -225,12 +225,12 @@ USE_TZ = True
 
 
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATIC_URL = 'static'
+STATIC_URL = 'static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 """ heroku """
 
-#PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+# PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
