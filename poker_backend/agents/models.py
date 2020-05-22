@@ -12,11 +12,14 @@ class AgentPlayer(models.Model):
         (0, 'Player'),
     )
     nickname = models.CharField(max_length=64)
-    code = models.CharField(max_length=12, unique=True)
+    code = models.CharField(max_length=12)
     #rakeback = models.DecimalField(max_digits=3, decimal_places=3)
     agent = models.IntegerField(choices=options, default=0)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='agent_players')
+
+    class Meta:
+        unique_together = ('code', 'user')
 
     def __str__(self):
         return f"{self.nickname} ({self.code})"
@@ -38,6 +41,9 @@ class Club(models.Model):
     platform = models.CharField(max_length=3, choices=PLATFORMS, default='PB')
     users = models.ManyToManyField(
         User, through='Deal', related_name='clubs')
+
+    class Meta:
+        unique_together = ('code', 'platform')
 
     def __str__(self):
         return f"{self.name} ({self.code}) - {self.club_id}"
@@ -63,7 +69,7 @@ class Deal(models.Model):
 
 class Account(models.Model):
     nickname = models.CharField(max_length=64)
-    club_account_id = models.IntegerField(unique=True)
+    club_account_id = models.IntegerField()
     agent_players = models.ManyToManyField(
         AgentPlayer, related_name="accounts", blank=True)
     clubs = models.ManyToManyField(

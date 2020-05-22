@@ -104,4 +104,8 @@ def register(request):
 
 
 def guide(request):
-    return render(request, 'users/guide.html')
+    load_account_form = UploadFileForm()
+    context = {
+        'load_account_form': load_account_form,
+    }
+    return render(request, 'users/guide.html', context)

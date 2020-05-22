@@ -7,4 +7,17 @@
     perspiciatis dolorem!
   </p>
 </div>
+
+<div>
+  {%load crispy_forms_tags %}
+  <h5>Load initial accounts</h5>
+  <form
+    method="POST"
+    action="{% url 'initial_account_load' %}"
+    enctype="multipart/form-data"
+  >
+    {% csrf_token %} {{ load_account_form| crispy }}
+    <input type="submit" value="Load Accounts" class="btn btn-primary" />
+  </form>
+</div>
 {% endblock%}

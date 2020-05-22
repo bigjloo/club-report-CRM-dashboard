@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from decimal import Decimal
 from django.http import Http404, HttpResponseRedirect, HttpResponse, JsonResponse
 from django.urls import reverse
-from .engine import get_report, csvfile_to_json, process_report, calculate_user_total_earnings
+from .engine import get_report, csvfile_to_json, process_report, calculate_user_total_earnings, process_initial_account_load
 from agents.models import Account, AgentPlayer, Club
 from .serializers import ReportSerializer
 from rest_framework.parsers import JSONParser, FormParser, FileUploadParser
@@ -18,12 +18,22 @@ from users.forms import AccountForm, AgentPlayerForm, UploadFileForm
 # Create your views here.
 
 
+class UploadFileInitialAccountsView(View):
+    def post(self, request):
+        csvfile = request.FILES['file']
+        json_data = csvfile_to_json(csvfile)
+        accounts = process_initial_account_load(json_data)
+        # add notification for success or fail + accounts list
+        return redirect('index')
+
+
 class UploadFileView(View):
     def post(self, request):
         csvfile = request.FILES['file']
         # if not csvfile.endswith('.csv'):
         #    return Http404("File not csv type")
-        csvfile_to_json(csvfile)
+        json_data = csvfile_to_json(csvfile)
+        process_report(json_data)
         return redirect('reports')
 
 

@@ -6,7 +6,7 @@ from .serializers import ReportSerializer
 import json
 import csv
 from django.core.exceptions import ValidationError
-
+from agents.serializers import InitialAccountSerializer
 """
 def calculate_account_rakeback(rakeback_percent, rake):
     account_rakeback = round((rakeback_percent * rake), 2)
@@ -63,7 +63,7 @@ def csvfile_to_json(file):
         for j in range(number_of_columns):
             record[headers[j]] = current_row[j]
         json_data.append(record)
-    process_report(json_data)
+    return json_data
 
 
 def process_report(json_data):
@@ -102,6 +102,21 @@ def process_report(json_data):
 
     for r in reports:
         r.save()
+    return reports
+
+
+def process_initial_account_load(json_data):
+    accounts = []
+    for row in json_data:
+        serializer = InitialAccountSerializer(data=row)
+        if serializer.is_valid():
+            account = serializer.save()
+            accounts.append(account)
+        else:
+            print(serializer.errors)
+            raise Http404("serializer not valid")
+
+    return accounts
 
 
 def calculate_user_total_earnings(reports, user):
@@ -116,27 +131,25 @@ def calculate_user_total_earnings(reports, user):
     for agent_player, reports in reports.items():
         agent_player_statement[agent_player] = Decimal(0)
         for report in reports:
-            print(report.account)
+            # print(report.account)
             account_total_rakeback = (report.total_rake *
                                       user_club_deal[report.club.id]['rakeback'] *
                                       user_club_deal[report.club.id]['chip_value'])
-            print(f"account total rakeback = {account_total_rakeback}")
+            #print(f"account total rakeback = {account_total_rakeback}")
             account_rakeback_out = (report.rakeback *
                                     report.account.club_deal.first().chip_value)
-            print(f"account rakeback out = {account_rakeback_out}")
+            #print(f"account rakeback out = {account_rakeback_out}")
             earnings = account_total_rakeback - account_rakeback_out
-            print(f"user earnings = {earnings}")
+            #print(f"user earnings = {earnings}")
             user_total_earnings += earnings
             agent_player_statement[agent_player] += report.net_winloss_fiat
-            print(
-                f"agent_player_statement {agent_player}= {agent_player_statement[agent_player]}")
+            # print(
+            #    f"agent_player_statement {agent_player}= {agent_player_statement[agent_player]}")
             club_statement[report.club.name] += ((report.gross_winloss + (report.total_rake * user_club_deal[report.club.id]['rakeback']))
                                                  * user_club_deal[report.club.id]['chip_value'])
-            print(
-                f"club statement {report.club.name} = {club_statement[report.club.name]}")
-    print(user_total_earnings)
-    print(agent_player_statement)
-    print(club_statement)
+            # print(
+            #    f"club statement {report.club.name} = {club_statement[report.club.name]}")
+
     return user_total_earnings
 
 
