@@ -81,6 +81,23 @@ class AgentPlayerDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+""" for user deals """
+
+
+class DealList(generics.ListCreateAPIView):
+    queryset = Deal.objects.all()
+    serializer_class = DealSerializer
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly,
+        isOwnerOrReadOnly,
+    ]
+    # add permission class here
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        serializer.save(user=user)
+
+
 """ put not tested // returns agents of clubs as well """
 
 
@@ -174,6 +191,9 @@ def add_account_club(request):
         return JsonResponse(serializer.errors, status=400)
 
 
+""" get clubs associated with individual account """
+
+
 def get_clubs(request, account_id):
     try:
         account = Account.objects.get(pk=account_id)
@@ -200,28 +220,5 @@ def edit_account(request, account_id):
         return redirect('index')
 
 
-"""
-def add_club(request):
-    if request.method == "POST":
-        serializer = DealSerializer(data=request.POST)
-        if serializer.is_valid():
-            serializer.user =
-            serializer.save()
-        else:
-            print(serializer.errors)
-        return redirect('index')
-"""
-
-
-class DealList(generics.ListCreateAPIView):
-    queryset = Deal.objects.all()
-    serializer_class = DealSerializer
-    permission_classes = [
-        permissions.IsAuthenticatedOrReadOnly,
-        isOwnerOrReadOnly,
-    ]
-    # add permission class here
-
-    def perform_create(self, serializer):
-        user = self.request.user
-        serializer.save(user=user)
+def initial_account_load(request):
+    TODO
