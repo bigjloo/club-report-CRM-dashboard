@@ -1,1 +1,1 @@
-'web: gunicorn pokerpa.wsgi --log-file' 
+'web: gunicorn poker_backend.wsgi --log-file' 
