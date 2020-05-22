@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const tables = document.querySelectorAll("table");
   tables.forEach((table) => {
-    alert("hi");
     const row_nets = table.getElementsByClassName("net");
     var sum = 0;
     for (var i = 0; i < row_nets.length; i++) {
@@ -17,3 +16,4 @@ document.addEventListener("DOMContentLoaded", () => {
     cell_sum.innerHTML = `<h4><strong>${sum}</strong><h4>`;
   });
 });
+d

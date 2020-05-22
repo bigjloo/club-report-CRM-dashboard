@@ -46,7 +46,7 @@
           <th>Referral ID</th>
           <th>Club Name</th>
           <th>Rakeback</th>
-          <th>MYR</th>
+          <th>$</th>
         </tr>
       </thead>
       <tbody>
@@ -55,7 +55,7 @@
           <td>{{ club_deal.club.club_id }}</td>
           <td>{{ club_deal.referral_id }}</td>
           <td>{{ club_deal.club.name}}</td>
-          <td>{{ club_deal.rakeback_percentage }}</td>
+          <td>{{ club_deal.rakeback_percentage|floatformat:"-3" }}</td>
           <td>{{ club_deal.chip_value }}</td>
         </tr>
         {% endfor %}
@@ -101,9 +101,9 @@
         </th>
         <th>Name</th>
         <th>Account ID</th>
-        <th>Status</th>
-        <th>Notes</th>
-        <th>Actions</th>
+        <th>Status (coming soon)</th>
+        <th>Notes (coming soon)</th>
+        <th>Edit/Delete</th>
       </tr>
     </thead>
     <tbody>
