@@ -27,7 +27,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = False
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1',
-                 'https://polar-wave-26965.herokuapp.com/']
+                 '.herokuapp.com']
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
