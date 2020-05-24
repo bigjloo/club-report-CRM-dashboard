@@ -106,8 +106,16 @@ def register(request):
 
 
 def guide(request):
+    user = request.user
     load_account_form = UploadFileForm()
+    agent_player_form = AgentPlayerForm()
+    account_form = AccountForm(user)
+    upload_form = UploadFileForm()
+
     context = {
         'load_account_form': load_account_form,
+        "agent_form": agent_player_form,
+        "account_form": account_form,
+        'upload_form': upload_form,
     }
     return render(request, 'users/guide.html', context)

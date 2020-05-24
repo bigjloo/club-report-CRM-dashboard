@@ -67,7 +67,17 @@ class ReportView(View):
 
     def get(self, request):
         form = DateForm()
-        return render(request, 'reports/reports.html', {'form': form})
+        user = request.user
+        agent_player_form = AgentPlayerForm()
+        account_form = AccountForm(user)
+        upload_form = UploadFileForm()
+        context = {
+            "agent_form": agent_player_form,
+            "account_form": account_form,
+            'upload_form': upload_form,
+            "form": form,
+        }
+        return render(request, 'reports/reports.html', context)
 
 
 def create_report_view(request):
@@ -77,4 +87,4 @@ def create_report_view(request):
 
 def report_view(request):
     form = DateForm()
-    return render(request, 'reports/reports.html', {'form': form})
+    return render(request, 'reports/reports.html', context)
