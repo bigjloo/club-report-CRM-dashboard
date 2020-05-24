@@ -211,7 +211,6 @@ def edit_account(request, account_id):
 
     if request.method == "POST":
         data = FormParser().parse(request)
-        print(data)
         agent_player = AgentPlayer.objects.get(pk=data['agent_players'])
         account.nickname = data['nickname']
         account.club_account_id = data['club_account_id']
@@ -222,3 +221,15 @@ def edit_account(request, account_id):
 
 def initial_account_load(request):
     TODO
+
+
+""" alternate to api to create agent/player"""
+
+
+def create_agent(request):
+    if request.method == "POST":
+        data = FormParser().parse(request)
+        serializer = AgentPlayerSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return HttpResponseRedirect(reverse('index'))

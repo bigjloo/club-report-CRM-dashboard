@@ -78,6 +78,10 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   });
 
+  document
+    .querySelector("#agent_player_modal")
+    .querySelector("form").onsubmit = () => {};
+
   /////////////////////////////////
 
   // Activate tooltip for css
