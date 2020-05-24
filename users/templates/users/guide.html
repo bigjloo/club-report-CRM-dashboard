@@ -1,23 +1,232 @@
-{% extends "users/base.html" %} {% block body%}
+{% extends "users/base.html" %} {% block body%} {% load static %}
 <div>
+  <h1 class="display-4">First Time Use</h1>
+  <h2>Step 1) <u>Add Clubs</u>:</h2>
+  <img src="{% static 'users/img/add_club_button.png'%}" />
+  <img src="{% static 'users/img/add_club.png'%}" />
+  <dl class="row">
+    <dt class="col-sm-3">Club</dt>
+    <dd class="col-sm-9">Choose club from the club list</dd>
+    <dt class="col-sm-3">Rakeback percentage</dt>
+    <dd class="col-sm-9">
+      This is the rakeback you're getting for that club. Use decimal format.
+      Example: 50% -> <mark>0.5</mark>
+      <span class="badge badge-danger">Important</span>
+    </dd>
+    <dt class="col-sm-3">Chip Value</dt>
+    <dd class="col-sm-9">
+      This is the value per chip of the club in your preferred currency (ie
+      <mark>11111</mark> for AsiaUnion)
+    </dd>
+    <dt class="col-sm-3">Referral ID</dt>
+    <dd class="col-sm-9">
+      This is your referral code for the club. If none, leave empty (ie.
+      <mark>998828</mark>)
+    </dd>
+    <p class="col-sm-12">
+      To add multiple club deals (getting different deals for same club), the
+      referral IDs have to be unique.
+    </p>
+  </dl>
+
+  <h2>Step 2) <u>Add Agent/Players</u>:</h2>
+  <img src="{% static 'users/img/add_agent_player.png'%}" />
+  <dl class="row">
+    <dt class="col-sm-3">Nickname</dt>
+    <dd class="col-sm-9">Nickname for Agent/Player</dd>
+    <dt class="col-sm-3">
+      Code <span class="badge badge-danger">Important</span>
+    </dt>
+    <dd class="col-sm-9">
+      This code will be used for reference when creating reports. You can use
+      the agent ID for agents (<mark>998828</mark>) or use your own format ie
+      <mark>AD001</mark> (for Adam Smith 001). Case sensitive.
+    </dd>
+  </dl>
+
+  <h2>Step 3) <u>Add Accounts</u>:</h2>
   <p>
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate,
-    doloribus. Libero, aliquam. Ducimus, ipsam ad voluptates vero sed qui
-    reprehenderit totam quibusdam veritatis illo odit quasi fugiat omnis
-    perspiciatis dolorem!
+    Please download the template from this link:
+    <a
+      href="https://docs.google.com/spreadsheets/d/1NsGvOEBKGOuiFqQJXncooT82OZsADjmuduVINHEafAw/edit?usp=sharing"
+      >Initial Add Accounts Template</a
+    >
   </p>
+  <p>Next,</p>
+  <p>Fill in the sheet with accounts details</p>
+  <dl class="row">
+    <dt class="col-sm-3">Nickname</dt>
+    <dd class="col-sm-9">
+      You can use any nickname you wish but it is advisable to use the in-game
+      nickname for the account.
+    </dd>
+    <dt class="col-sm-3">
+      Club_account_id <span class="badge badge-danger">Important</span>
+    </dt>
+    <dd class="col-sm-9">
+      Use the in-game account ID associated with the account (ie
+      <mark>112233</mark>)
+    </dd>
+    <dt class="col-sm-3">
+      Club_id
+    </dt>
+    <dd class="col-sm-9">
+      ID of club for this account
+    </dd>
+    <dt class="col-sm-3">
+      Rakeback_percentage
+    </dt>
+    <dd class="col-sm-9">
+      This value should not be higher than the rakeback_percentage you get from
+      the club. In decimal format (<mark>0.5</mark> instead of 50%)
+    </dd>
+    <dt class="col-sm-3">
+      Chip_value
+    </dt>
+    <dd class="col-sm-9">
+      The value per chip for <b>this account</b> in the club
+    </dd>
+    <p class="col-sm-12">
+      After filling in all accounts,
+    </p>
+    <p class="col-sm-12">
+      <img src="{% static 'users/img/download_csv_from_sheets.png'%}" />
+    </p>
+    <p class="col-sm-12">
+      <i>File-> Download -> Comma-separated values (.csv, current sheet)</i>
+    </p>
+    <p class="col-sm-12">
+      Then,
+    </p>
+    <p class="col-sm-12">
+      Use the 'Load Initial Accounts' file upload form below and select the file
+      and click Load Accounts.
+    </p>
+  </dl>
+  <div>
+    {%load crispy_forms_tags %}
+    <h5>Load initial accounts</h5>
+    <form
+      method="POST"
+      action="{% url 'initial_account_load' %}"
+      enctype="multipart/form-data"
+    >
+      {% csrf_token %} {{ load_account_form| crispy }}
+      <input type="submit" value="Load Accounts" class="btn btn-primary" />
+    </form>
+  </div>
 </div>
+<hr />
 
 <div>
-  {%load crispy_forms_tags %}
-  <h5>Load initial accounts</h5>
-  <form
-    method="POST"
-    action="{% url 'initial_account_load' %}"
-    enctype="multipart/form-data"
-  >
-    {% csrf_token %} {{ load_account_form| crispy }}
-    <input type="submit" value="Load Accounts" class="btn btn-primary" />
-  </form>
+  <h1 class="display-4">FAQ</h1>
+  <ul>
+    <li><a href="#upload_report_faq">How do I upload weekly reports</a></li>
+    <li>
+      <a href="#edit_account_faq">Change account to different agent/player</a>
+    </li>
+    <li><a href="#add_account_club_faq">Add clubs for account</a></li>
+    
+    <li><a href="#report_bug_faq">How do I report a bug?</a></li>
+    <li><a href="#partnership_faq">I would like to work together on this project</a></li>
+  </ul>
+  <div id="upload_report_faq" class="card">
+    <div class="card-header">
+      <h5>
+        How do I upload weekly reports?
+      </h5>
+    </div>
+    <div class="card-body">
+      <p>
+        To upload reports, first download the template from:
+        <a
+          href="https://docs.google.com/spreadsheets/d/1VN_JFLp8ik3tOf_NsI-NmZJtdE8ptmhF79zbxt-zp-c/edit?usp=sharing"
+          >Report template</a
+        ><br />
+        <img src="{% static 'users/img/report_template.png'%}" />
+        <dl class="row">
+          <dt class="col-sm-3">Club <span class="badge badge-danger">Important</span></dt>
+          <dd class="col-sm-9">
+            the in-game club ID for report 
+          </dd>
+          <dt class="col-sm-3">Account <span class="badge badge-danger">Important</span></dt>
+          <dd class="col-sm-9">
+            the club_account_id for the account
+          </dd>
+          <dt class="col-sm-3">Agent_player <span class="badge badge-danger">Important</span></dt>
+          <dd class="col-sm-9">
+            Use the CODE of the Agent/Player that this account belongs to. Case sensitive
+          </dd>
+          <p class="col-sm-12">For columns below, DO NOT include the currency ie (use <mark>829.25</mark> instead of RM829.25)</p>
+          <dt class="col-sm-3">Gross_winloss</dt>
+          <dd class="col-sm-9">
+            The gross win/loss of the account (before rakeback)
+          </dd>
+          <dt class="col-sm-3">Total_rake </dt>
+          <dd class="col-sm-9">
+            The gross rake generated for the account (<u>NOT</u> rakeback)
+          </dd>
+        </dl>
+        <p class="col-sm-12">After filling in all the report details, download the file to your computer in CSV format</p>
+        <p class="col-sm-12">
+          <img src="{% static 'users/img/download_csv_from_sheets.png'%}" />
+        </p>
+        <i class="col-sm-12">File-> Download -> Comma-separated values (.csv, current sheet)</i>
+        <p class="col-sm-12">Click Upload Reports from the navigation bar and upload the reports file</p>
+
+      </p>
+    </div>
+  </div>
+
+  <div id="edit_account_faq" class="card">
+    <div class="card-header">
+      <h5>
+        How do I change account to tag under a different agent/player?
+      </h5>
+    </div>
+    <div class="card-body">
+      <p>Click the <i>pen-like</i> icon and fill in details to edit</p>
+      <img src="{% static 'users/img/edit_delete_account.png'%}" />
+    </div>
+  </div>
+
+  <div id="add_account_club_faq" class="card">
+    <div class="card-header">
+      <h5>
+        How do I add clubs associated to accounts?
+      </h5>
+    </div>
+
+    <div class="card-body">
+      <p>Click on the account nickname (name)</p>
+      <img src="{% static 'users/img/name_account.png'%}" />
+      <p>Then fill in the details</p>
+      <img src="{% static 'users/img/add_account_club.png'%}" />
+    </div>
+  </div>
+  <div id="report_bug_faq" class="card">
+    <div class="card-header">
+      <h5>
+        How do I report a bug?
+      </h5>
+    </div>
+
+    <div class="card-body">
+      <p>You can submit a ticket or <a href="mailto: junzhongloo@gmail.com ">email us</a>. </p>
+    </div>
+  </div>
+
+  <div id="partnership_faq" class="card">
+    <div class="card-header">
+      <h5>
+        I would like to work together on this project
+      </h5>
+    </div>
+  
+    <div class="card-body">
+      <p>If you are interested in our partners program. Please leave your contact at the form below or <a href="mailto: junzhongloo@gmail.com ">email us</a></p>
+      <p>TODO FORM</p>
+    </div>
+  </div>
 </div>
 {% endblock%}

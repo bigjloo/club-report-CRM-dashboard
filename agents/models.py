@@ -61,7 +61,7 @@ class Deal(models.Model):
     referral_id = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        unique_together = ('user', 'club')
+        unique_together = (['user', 'club', 'referral_id'])
 
     def __str__(self):
         return f"{self.club.name} | RB = ({self.rakeback_percentage}) | 1  = {self.chip_value}"
