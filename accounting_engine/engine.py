@@ -119,7 +119,7 @@ def process_initial_account_load(json_data):
     return accounts
 
 
-def calculate_user_total_earnings(reports, user):
+def calculate_user_statement(reports, user):
     user_total_earnings = Decimal(0)
     user_club_deal = {}
     club_statement = {}
@@ -150,7 +150,11 @@ def calculate_user_total_earnings(reports, user):
             # print(
             #    f"club statement {report.club.name} = {club_statement[report.club.name]}")
 
-    return user_total_earnings
+    user_statement = {}
+    user_statement['user_total_earnings'] = user_total_earnings
+    user_statement['agent_player_statement'] = agent_player_statement
+    user_statement['club_statement'] = club_statement
+    return user_statement
 
 
 def prepare_statement(reports, user):

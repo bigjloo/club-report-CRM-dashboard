@@ -11,6 +11,3 @@ urlpatterns = [
     path('initial_account_load', UploadFileInitialAccountsView.as_view(),
          name='initial_account_load'),
 ]
-
-#path('upload_report', views.create_report, name='upload_report'),
-#path('reports/', views.report_view, name='reports'),

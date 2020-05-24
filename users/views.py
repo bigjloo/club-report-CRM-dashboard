@@ -7,7 +7,7 @@ from django.urls import reverse
 from agents.models import Club, AgentPlayer
 from .forms import AgentPlayerForm, AccountForm, AccountClubForm, UserForm, UploadFileForm, EditAccountForm, AddClubForm
 from rest_framework import generics
-
+from notes.models import Announcement
 
 # Create your views here.
 
@@ -23,6 +23,7 @@ def index(request):
     account_club_form = AccountClubForm(user)
     edit_account_form = EditAccountForm(user)
     add_club_form = AddClubForm()
+    announcements = Announcement.objects.all()
     context = {
         "user": user,
         "clubs": clubs,
@@ -32,6 +33,7 @@ def index(request):
         'account_club_form': account_club_form,
         'edit_account_form': edit_account_form,
         'add_club_form': add_club_form,
+        'announcements': announcements,
     }
     return render(request, "users/user.html", context)
 

@@ -1,60 +1,74 @@
-{% extends 'users/base.html' %} {% load crispy_forms_tags %}{% block title %}
-Reports {% endblock %} {% block script %} {% load static %}
-<script src="{% static 'accounting_engine\js\reports.js' %}"></script>
-
-{%endblock%} {% block style %} {% endblock %} {% block body %}
+{%extends 'users/base.html'%} {%block title%}Reports {%endblock%}{%block body%}
 <h3>Reports</h3>
 <div class="row">
   <div class="col-md-4">
-    <form id="report_form" action="{% url 'reports' %}" method="POST">
-      {% csrf_token %} {{ form|crispy }}
+    <form id="report_form" action="{% url 'reports' %}" method="POST">
+      {% load crispy_forms_tags %} {% csrf_token %} {{ form|crispy }}
       <input
         type="submit"
         class="btn btn-primary btn-block"
-        value="Get Report"
+        value="Get Report"
       />
     </form>
   </div>
-  {% if user_earnings %}
+
   <div class="col-md-8">
-    <div class="card">
-      <div class="card-header">Statement</div>
-      <div class="card-body">Total Earnings: RM{{ user_earnings}}</div>
+    <div class="row card">
+      <div class="card-header">User</div>
+      <div class="card-body">
+        {%if user_earnings%} Earnings: {{ user_earnings|floatformat }} {%endif%}
+      </div>
+    </div>
+    <div class="row card">
+      <div class="card-header">Agent Player</div>
+      <div class="card-body">
+        {% for agent_player, value in agent_player_statement.items %}
+        <p>{{agent_player}}: {{value|floatformat}}</p>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="row card">
+      <div class="card-header">Club</div>
+      <div class="card-body">
+        {%for club, value in club_statement.items%}
+        <p>{{club}}: {{value|floatformat}}</p>
+        {%endfor%}
+      </div>
     </div>
   </div>
-  {% endif %}
+
+  <hr />
+  {% if reports %}
+  <div class="row">
+    {% for agent, reports in reports.items %}
+    <h3>{{ agent }}</h3>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Club</th>
+          <th>Account</th>
+          <th>WinLoss</th>
+          <th>Rake</th>
+          <th>Rakeback</th>
+          <th>Net Chips</th>
+          <th>$</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for report in reports %}
+        <tr>
+          <td>{{ report.club}}</td>
+          <td>{{report.account}}</td>
+          <td>{{ report.gross_winloss}}</td>
+          <td>{{ report.total_rake}}</td>
+          <td>{{ report.rakeback }}</td>
+          <td>{{ report.net_winloss}}</td>
+          <td><span class="net">{{ report.net_winloss_fiat}}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endfor %}
+  </div>
+  {%endif%} {%endblock%}
 </div>
-<hr />
-{% if reports %}
-<div>
-  {% for agent, reports in reports.items %}
-  <h3>{{ agent }}</h3>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Club</th>
-        <th>Account</th>
-        <th>WinLoss</th>
-        <th>Rake</th>
-        <th>Rakeback</th>
-        <th>Net Chips</th>
-        <th>$</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for report in reports %}
-      <tr>
-        <td>{{ report.club}}</td>
-        <td>{{report.account}}</td>
-        <td>{{ report.gross_winloss}}</td>
-        <td>{{ report.total_rake}}</td>
-        <td>{{ report.rakeback }}</td>
-        <td>{{ report.net_winloss}}</td>
-        <td><span class="net">{{ report.net_winloss_fiat}}</span></td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  {% endfor %}
-</div>
-{% endif %} {% endblock %}

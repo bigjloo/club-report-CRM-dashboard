@@ -14,12 +14,13 @@
 
 {%block body%}
 <!-- annoucement -->
-<div id="annoucement"class="alert alert-success alert-dismissible fade show">
-  <h4>Welcome to PokerPA</h4>
-  <p>Thanks for participating in our beta program. Please read this <a href="{% url 'guide' %}">guide</a> to use this app</p>
-  <p>To add club please contact us</p>
-  <button type="button" class="close" data-dismiss="alert">&times;</button>
-</div>
+  {% for announcement_obj in announcements %}
+    <div class="alert alert-success alert-dismissible fade show annoucement">
+      <p>{{ announcement_obj }} </p>
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+  {% endfor %}
+
 <!-- welcome User -->
 <div>
   <p class='display-4'>Welcome {{ user.username}}</p>
