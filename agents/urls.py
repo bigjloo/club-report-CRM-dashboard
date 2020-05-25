@@ -15,7 +15,7 @@ urlpatterns = [
     path('account_clubs/<int:account_id>', views.get_clubs, name="get_clubs"),
     path('edit_account/<int:account_id>',
          views.edit_account, name="edit_account"),
-    path('deals', views.DealList.as_view(), name="deals"),
+    path('deals', views.create_deal, name="deals"),
 
 ]
 

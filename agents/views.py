@@ -96,6 +96,18 @@ class DealList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         user = self.request.user
         serializer.save(user=user)
+        return redirect('index')
+
+
+def create_deal(request):
+    if request.method == 'POST':
+        user = request.user
+        data = FormParser().parse(request)
+        serializer = DealSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save(user=user)
+            return redirect('index')
+        return JsonResponse(serializer.errors, status=400)
 
 
 """ put not tested // returns agents of clubs as well """
@@ -173,7 +185,6 @@ def create_account(request):
         serializer = CreateAccountSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            next = request.POST.get('next', '/')
             return redirect('index')
         return JsonResponse(serializer.errors, status=400)
 
@@ -228,8 +239,9 @@ def initial_account_load(request):
 
 def create_agent(request):
     if request.method == "POST":
+        user = request.user
         data = FormParser().parse(request)
         serializer = AgentPlayerSerializer(data=data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(user=user)
             return HttpResponseRedirect(reverse('index'))

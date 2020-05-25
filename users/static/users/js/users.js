@@ -77,11 +77,19 @@ document.addEventListener("DOMContentLoaded", () => {
       request.send(data);
     };
   });
-
-  document
-    .querySelector("#agent_player_modal")
-    .querySelector("form").onsubmit = () => {};
-
+  /*     FETCH add_club
+  const add_club_form = document.querySelector("#add_club_form");
+  add_club_form.onsubmit = () => {
+    let url = add_club_form.action
+    //do fetch
+    let formData = new FormData()
+    formData.append('')
+    fetch(url,)
+    //return false
+    return false;
+    // close modal
+  };
+  */
   /////////////////////////////////
 
   // Activate tooltip for css
