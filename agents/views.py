@@ -106,6 +106,7 @@ def create_deal(request):
         serializer = DealSerializer(data=data)
         if serializer.is_valid():
             serializer.save(user=user)
+            request.session['message'] = "Club Added!"
             return redirect('index')
         return JsonResponse(serializer.errors, status=400)
 

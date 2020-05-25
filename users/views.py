@@ -24,6 +24,7 @@ def index(request):
     edit_account_form = EditAccountForm(user)
     add_club_form = AddClubForm()
     announcements = Announcement.objects.all()
+    message = request.session.get('message')
     context = {
         "user": user,
         "clubs": clubs,
@@ -34,6 +35,7 @@ def index(request):
         'edit_account_form': edit_account_form,
         'add_club_form': add_club_form,
         'announcements': announcements,
+        'message': message
     }
     return render(request, "users/user.html", context)
 
