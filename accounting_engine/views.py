@@ -85,6 +85,8 @@ def create_report_view(request):
     return HttpResponseRedirect(reverse('index'))
 
 
+"""
 def report_view(request):
     form = DateForm()
     return render(request, 'reports/reports.html', context)
+"""

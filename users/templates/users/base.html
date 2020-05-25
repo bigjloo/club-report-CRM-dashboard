@@ -300,7 +300,7 @@
               <div class="container">
                 <div id="account_clubs_div">
                 </div>
-                <form method="POST" action="{% url 'deals' %}">
+                <form id="add_club_form" method="POST" action="{% url 'deals' %}">
                   {% csrf_token %}{{add_club_form|crispy}}
                   <input type="submit" value="Add Club" class="btn btn-primary btn-block">
                 </form>
