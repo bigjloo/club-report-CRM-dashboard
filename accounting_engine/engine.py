@@ -66,7 +66,7 @@ def csvfile_to_json(file):
     return json_data
 
 
-def process_report(json_data):
+def process_report(json_data, user):
     reports = []
     for row in json_data:
         try:
@@ -81,7 +81,8 @@ def process_report(json_data):
             raise Http404("Club does not exist")
         try:
             club_account_id = row.pop('account')
-            account = Account.objects.get(club_account_id=club_account_id)
+            account = Account.objects.get(
+                club_account_id=club_account_id, user=user)
         except Account.DoesNotExist:
             raise Http404("Account does not exist")
         serializer = ReportSerializer(data=row)
@@ -105,12 +106,12 @@ def process_report(json_data):
     return reports
 
 
-def process_initial_account_load(json_data):
+def process_initial_account_load(json_data, user):
     accounts = []
     for row in json_data:
         serializer = InitialAccountSerializer(data=row)
         if serializer.is_valid():
-            account = serializer.save()
+            account = serializer.save(user=user)
             accounts.append(account)
         else:
             print(serializer.errors)

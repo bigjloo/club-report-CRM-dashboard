@@ -74,6 +74,11 @@ class Account(models.Model):
         AgentPlayer, related_name="accounts", blank=True)
     clubs = models.ManyToManyField(
         Club, through='AccountClub', related_name='accounts', blank=True)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='accounts')
+
+    class Meta:
+        unique_together = (['user', 'club_account_id'])
 
     def __str__(self):
         return f"{self.nickname} ({self.club_account_id})"

@@ -22,7 +22,8 @@ class UploadFileInitialAccountsView(View):
     def post(self, request):
         csvfile = request.FILES['file']
         json_data = csvfile_to_json(csvfile)
-        accounts = process_initial_account_load(json_data)
+        user = request.user
+        accounts = process_initial_account_load(json_data, user)
         # add notification for success or fail + accounts list
         return redirect('index')
 
@@ -33,7 +34,8 @@ class UploadFileView(View):
         # if not csvfile.endswith('.csv'):
         #    return Http404("File not csv type")
         json_data = csvfile_to_json(csvfile)
-        process_report(json_data)
+        user = request.user
+        process_report(json_data, user)
         return redirect('reports')
 
 
