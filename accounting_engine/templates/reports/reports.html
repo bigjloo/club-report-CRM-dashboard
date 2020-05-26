@@ -13,28 +13,41 @@
   </div>
 
   <div class="col-md-8">
-    <div class="row card">
-      <div class="card-header">User</div>
+    {%if user_earnings%}
+    <div class="card">
+      <div class="card-header"><h5>User</h5></div>
       <div class="card-body">
-        {%if user_earnings%} Earnings: {{ user_earnings|floatformat }} {%endif%}
+        <div class="row">
+          <div class="col-sm-3"><strong>Earnings:</strong></div>
+          <div class="col-sm-2">{{ user_earnings|floatformat }}</div>
+        </div>
       </div>
     </div>
-    <div class="row card">
-      <div class="card-header">Agent Player</div>
+    {%endif%} {% if agent_player_statement %}
+    <div class="card">
+      <div class="card-header"><h5>Agent Player</h5></div>
       <div class="card-body">
         {% for agent_player, value in agent_player_statement.items %}
-        <p>{{agent_player}}: {{value|floatformat}}</p>
+        <div class="row">
+          <div class="col-sm-3"><strong>{{agent_player}}:</strong></div>
+          <div class="col-sm-2">{{value|floatformat}}</div>
+        </div>
         {% endfor %}
       </div>
     </div>
-    <div class="row card">
-      <div class="card-header">Club</div>
+    {% endif %} {% if club_statement %}
+    <div class="card">
+      <div class="card-header"><h5>Club</h5></div>
       <div class="card-body">
         {%for club, value in club_statement.items%}
-        <p>{{club}}: {{value|floatformat}}</p>
+        <div class="row">
+          <div class="col-sm-3"><strong>{{club}}:</strong></div>
+          <div class="col-sm-2">{{value|floatformat}}</div>
+        </div>
         {%endfor%}
       </div>
     </div>
+    {% endif %}
   </div>
 
   <hr />

@@ -84,7 +84,7 @@ class DealSerializer(serializers.ModelSerializer):
 
 class InitialAccountSerializer(serializers.ModelSerializer):
 
-    agent_player_code = serializers.IntegerField()
+    agent_player_code = serializers.CharField()
     club_id = serializers.IntegerField()
     rakeback_percentage = serializers.DecimalField(
         max_digits=3, decimal_places=3)
