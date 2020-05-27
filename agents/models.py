@@ -26,18 +26,16 @@ class AgentPlayer(models.Model):
 
 
 class Club(models.Model):
-    PLATFORMS = (
+    PLATFORMS = [
         ('UP', 'Upoker'),
         ('PB', 'PokerBros'),
         ('PPP', 'PPPoker'),
         ('ANP', 'All New Poker'),
         ('PT', 'PokerTime'),
-    )
+    ]
     name = models.CharField(max_length=64)
     code = models.CharField(max_length=3)
     club_id = models.IntegerField(unique=True)
-    # chip_value = models.DecimalField(max_digits=3, decimal_places=2, validators=[
-    #                                 MinValueValidator(Decimal('0.01'))])
     platform = models.CharField(max_length=3, choices=PLATFORMS, default='PB')
     users = models.ManyToManyField(
         User, through='Deal', related_name='clubs')

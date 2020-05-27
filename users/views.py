@@ -13,10 +13,11 @@ from notes.models import Announcement
 
 
 def index(request):
+    # returns user to login page if not logged in
     if not request.user.is_authenticated:
         return render(request, 'users/login.html')
+
     user = request.user
-    clubs = Club.objects.all()
     agent_player_form = AgentPlayerForm()
     account_form = AccountForm(user)
     upload_form = UploadFileForm()
@@ -27,7 +28,6 @@ def index(request):
 
     context = {
         "user": user,
-        "clubs": clubs,
         "agent_form": agent_player_form,
         "account_form": account_form,
         'upload_form': upload_form,

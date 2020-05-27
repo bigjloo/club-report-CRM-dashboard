@@ -27,7 +27,7 @@ class AccountForm(ModelForm):
 
     class Meta:
         model = Account
-        fields = '__all__'
+        exclude = ['user']
 
     def __init__(self, user, *args, **kwargs):
         super(AccountForm, self).__init__(*args, **kwargs)
