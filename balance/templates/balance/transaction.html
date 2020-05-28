@@ -1,0 +1,9 @@
+{% extends "users/base.html" %} {% block title %} Transaction {% endblock %}
+{%load crispy_forms_tags %} {% block body %}
+
+<div>
+  <form>
+    {{ transaction_form|crispy }}
+  </form>
+</div>
+{% endblock %}

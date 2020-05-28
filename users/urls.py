@@ -11,6 +11,8 @@ urlpatterns = [
     path('', include('accounting_engine.urls')),
     path('guide/', views.guide, name='guide'),
     path('', include('notes.urls')),
+    path('', include('balance.urls')),
+
 ]
 
 #path('upload_report', include('accounting_engine.urls')),
