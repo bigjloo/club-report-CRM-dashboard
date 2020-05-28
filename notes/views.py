@@ -15,13 +15,11 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def get_notes(request, agent_id):
     try:
-        agent_player = request.user.agent_players.objects.get(
+        agent_player = request.user.agent_players.get(
             pk=agent_id)
         note = Note.objects.get(pk=agent_player.note.pk).note
     except Note.DoesNotExist:
         return Http404("Note retrieve fail")
-        #data = serializers.serialize('json', [note], fields='note')
-        #json_data = json.dumps(data)
     return HttpResponse(serializers.serialize('json', [note]))
 
 
@@ -29,7 +27,7 @@ def update_note(request, agent_id):
 
     if request.method == "POST":
         try:
-            agent_player = request.user.agent_players.objects.get(pk=agent_id)
+            agent_player = request.user.agent_players.get(pk=agent_id)
         except AgentPlayer.DoesNotExist:
             return Http404("Agent Does not exist")
         if agent_player.note is not None:

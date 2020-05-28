@@ -64,7 +64,9 @@ document.addEventListener("DOMContentLoaded", () => {
       request.onload = () => {
         const data = JSON.parse(request.responseText);
         if (request.status == 200) {
+          alert("Hi");
           const note = data[0].fields["note"];
+          alert(note);
           modal_txt.innerHTML = note;
         } else {
           alert("data load fail");
