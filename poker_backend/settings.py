@@ -174,6 +174,7 @@ INSTALLED_APPS = [
     'agents.apps.AgentsConfig',
     'accounting_engine.apps.AccountingEngineConfig',
     'notes.apps.NotesConfig',
+    'balance.apps.BalanceConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

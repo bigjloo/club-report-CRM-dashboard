@@ -17,6 +17,8 @@ class AgentPlayer(models.Model):
     agent = models.IntegerField(choices=options, default=0)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='agent_players')
+    note = models.ForeignKey(
+        'notes.Note', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         unique_together = ('code', 'user')
