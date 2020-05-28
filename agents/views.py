@@ -182,10 +182,11 @@ class AccountList(generics.ListCreateAPIView):
 
 def create_account(request):
     if request.method == 'POST':
+        user = request.user
         data = FormParser().parse(request)
         serializer = CreateAccountSerializer(data=data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(user=user)
             return redirect('index')
         return JsonResponse(serializer.errors, status=400)
 

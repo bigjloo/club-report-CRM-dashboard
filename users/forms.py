@@ -2,8 +2,6 @@ from django.forms import ModelForm, modelform_factory, ChoiceField, CharField
 from agents.models import AgentPlayer, Account, AccountClub, Deal, Club
 from django.contrib.auth.models import User
 from django import forms
-# from crispy_forms.helper import FormHelper
-# from crispy_forms.layout import Submit
 
 
 class AgentPlayerForm(ModelForm):
