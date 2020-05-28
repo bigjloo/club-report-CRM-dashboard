@@ -32,6 +32,7 @@ class Club(models.Model):
         ('PPP', 'PPPoker'),
         ('ANP', 'All New Poker'),
         ('PT', 'PokerTime'),
+        ('PM', 'PokerMaster'),
     ]
     name = models.CharField(max_length=64)
     code = models.CharField(max_length=3)
