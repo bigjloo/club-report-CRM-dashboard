@@ -27,4 +27,4 @@ class Report(models.Model):
         Club, on_delete=models.SET_NULL,  null=True, related_name="reports", blank=True)
 
     def __str__(self):
-        return f"{self.account}: W/L: {self.gross_winloss} | RAKE: {self.total_rake} "
+        return f"{self.created}|{self.account}: W/L: {self.gross_winloss} | RAKE: {self.total_rake} "
