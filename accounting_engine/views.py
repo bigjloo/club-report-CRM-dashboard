@@ -8,7 +8,7 @@ from .engine import get_report, csvfile_to_json, process_report, calculate_user_
 from agents.models import Account, AgentPlayer, Club
 from .serializers import ReportSerializer
 from rest_framework.parsers import JSONParser, FormParser, FileUploadParser
-from .forms import DateForm
+from .forms import DateForm, CPForm
 from django.views import View
 from users.forms import UploadFileForm
 import csv
@@ -16,6 +16,60 @@ import json
 from rest_framework.views import APIView
 from users.forms import AccountForm, AgentPlayerForm, UploadFileForm
 # Create your views here.
+
+
+def post_cp_form(request):
+    if request.method == "POST":
+        data = FormParser().parse(request)
+        data_array = data['cparea'].split()
+        agents = {}
+        i = 0
+        while i in range(len(data_array)):
+            agent_player = data_array[i + 3]
+            rakeback_percentage = Decimal(data_array[i + 6])
+            total_rake = Decimal(data_array[i + 5])
+            chip_value = Decimal(data_array[i + 7])
+            gross_winloss = Decimal(data_array[i + 4])
+            rakeback = rakeback_percentage * total_rake
+            net_chips = gross_winloss + rakeback
+            net_fiat = net_chips * chip_value
+            report = {
+                'club': data_array[i],
+                'playername': data_array[i + 1],
+                'playerID': data_array[i + 2],
+                'gross_winloss': data_array[i + 4],
+                'total_rake': data_array[i + 5],
+                'rakeback': rakeback,
+                'net_chips': net_chips,
+                'net_fiat': net_fiat,
+            }
+            if agent_player not in agents:
+                agents[agent_player] = []
+
+            agents[agent_player].append(report)
+            i += 8
+
+        cp_form = CPForm()
+        context = {
+            'cp_form': cp_form,
+            'agents': agents,
+        }
+        return render(request, 'reports/cpupload.html', context)
+
+
+def cpreport(request):
+    cp_form = CPForm()
+    context = {
+        'cp_form': cp_form
+    }
+    return render(request, 'reports/cpupload.html', context)
+
+
+def api_report(request):
+    if request.method == "POST":
+        print(request.POST)
+        return JsonResponse(status=200)
+        TODO
 
 
 class UploadFileInitialAccountsView(View):

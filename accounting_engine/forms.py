@@ -7,3 +7,7 @@ class DateForm(forms.Form):
         widget=forms.SelectDateWidget(), initial=datetime.date.today, )
     end_date = forms.DateField(
         widget=forms.SelectDateWidget(), initial=datetime.date.today, )
+
+
+class CPForm(forms.Form):
+    cparea = forms.CharField(widget=forms.Textarea, label="Copy Paste REPORT")

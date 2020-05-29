@@ -1,0 +1,38 @@
+{% extends "users/base.html" %} {% block body%}
+<form method="POST" action="{% url 'post_cp_form' %}">
+  {%load crispy_forms_tags %} {{ cp_form|crispy}} {% csrf_token %}
+  <input type="submit" value="Submit Report" />
+</form>
+<hr />
+{% if agents %} {% for agent, reports in agents.items %}
+<h3>{{ agent }}</h3>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Club</th>
+      <th>Player Name</th>
+      <th>Account ID</th>
+      <th>WinLoss</th>
+      <th>Total Rake</th>
+      <th>Rakeback</th>
+      <th>Net Chips</th>
+      <th>Net Fiat</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for report in reports %}
+    <tr>
+      <td>{{ report.club}}</td>
+      <td>{{report.playername}}</td>
+      <td>{{ report.playerID}}</td>
+      <td>{{ report.gross_winloss}}</td>
+      <td>{{ report.total_rake}}</td>
+      <td>{{ report.rakeback|floatformat}}</td>
+      <td>{{ report.net_chips|floatformat}}</td>
+      <td>{{ report.net_fiat|floatformat}}</td>
+      <!--<td><span class="net">{{ report.net_winloss_fiat}}</span></td> -->
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endfor %} {% endif %} {% endblock %}
