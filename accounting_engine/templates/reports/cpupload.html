@@ -1,7 +1,17 @@
-{% extends "users/base.html" %} {% block body%}
+{% extends "users/base.html" %} {% block script %} {% load static %}
+<script src="{% static 'accounting_engine/js/reports.js' %}"></script>
+{% endblock %} {% block body%}
+<i
+  >Follow the template format from:
+  <a
+    target="_blank"
+    href="https://docs.google.com/spreadsheets/d/1PIy6wWJI3itFa5FsFp7zXHxG8eA0OC0AoxVnQtcD8ok/edit?usp=sharing"
+    >https://docs.google.com/spreadsheets/d/1PIy6wWJI3itFa5FsFp7zXHxG8eA0OC0AoxVnQtcD8ok/edit?usp=sharing</a
+  ></i
+>
 <form method="POST" action="{% url 'post_cp_form' %}">
   {%load crispy_forms_tags %} {{ cp_form|crispy}} {% csrf_token %}
-  <input type="submit" value="Submit Report" />
+  <input type="submit" value="Generate Report" />
 </form>
 <hr />
 {% if agents %} {% for agent, reports in agents.items %}
@@ -29,7 +39,7 @@
       <td>{{ report.total_rake}}</td>
       <td>{{ report.rakeback|floatformat}}</td>
       <td>{{ report.net_chips|floatformat}}</td>
-      <td>{{ report.net_fiat|floatformat}}</td>
+      <td><span class="net">{{ report.net_fiat|floatformat}}</span></td>
       <!--<td><span class="net">{{ report.net_winloss_fiat}}</span></td> -->
     </tr>
     {% endfor %}

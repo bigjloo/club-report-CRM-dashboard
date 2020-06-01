@@ -16,4 +16,3 @@ document.addEventListener("DOMContentLoaded", () => {
     cell_sum.innerHTML = `<h4><strong>${sum}</strong><h4>`;
   });
 });
-d

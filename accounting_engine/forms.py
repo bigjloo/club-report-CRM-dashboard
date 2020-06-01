@@ -10,4 +10,5 @@ class DateForm(forms.Form):
 
 
 class CPForm(forms.Form):
-    cparea = forms.CharField(widget=forms.Textarea, label="Copy Paste REPORT")
+    cparea = forms.CharField(
+        widget=forms.Textarea, label="COPY PASTE HERE")

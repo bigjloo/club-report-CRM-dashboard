@@ -11,6 +11,6 @@ urlpatterns = [
     path('initial_account_load', UploadFileInitialAccountsView.as_view(),
          name='initial_account_load'),
     path('api/reports', views.api_report, name="api_reports"),
-    path('cpreport', views.cpreport, name="cpreport"),
+    path('copypaste', views.cpreport, name="cpreport"),
     path('post_cp_form', views.post_cp_form, name="post_cp_form"),
 ]
