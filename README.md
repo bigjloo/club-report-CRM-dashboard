@@ -1,4 +1,4 @@
-# django_poker_agent
+# Backend reporting and CRM dashboard
 MVP for poker agent backend project using Django
 
 * Took 2 weeks to build to test market.
