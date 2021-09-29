@@ -6,6 +6,6 @@ MVP for poker agent backend project using Django
 
 
 ## Demo
-[Video demo](https://www.youtube.com/watch?v=X8mA24Kkc64)
+[![youtube demo](./thumbnail.jpg)](https://www.youtube.com/watch?v=X8mA24Kkc64) 👈 
 
 [Live app](https://polar-wave-26965.herokuapp.com/)
